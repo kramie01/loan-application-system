@@ -28,7 +28,7 @@ if (!isset($_SESSION['email'])) {
     <div class="sidebar">
       <a href="../pages/cdashboard_page.php">Dashboard</a>
       <a href="../pages/capply_loan_page.php">Apply for a Loan</a>
-      <a href="../pages/cdetails_page.php">View Loan Details</a>
+      <a href="../pages/cloandetails_page.php">View Loan Details</a>
       <a href="../pages/cprofile_page.php">Profile</a>
       <a href="../auth/logout.php">Logout</a>
     </div>

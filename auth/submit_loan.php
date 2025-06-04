@@ -31,7 +31,7 @@ try {
         $applicantID = $applicant['applicantID'];
 
         // Check for active loans
-        $stmt = $pdo->prepare("SELECT status FROM loan_info WHERE applicantID = ? AND status NOT IN ('Paid', 'Done')");
+        $stmt = $pdo->prepare("SELECT status FROM loan_info WHERE applicantID = ? AND status NOT IN ('Paid', 'Cancelled')");
         $stmt->execute([$applicantID]);
         $activeLoan = $stmt->fetch();
 
