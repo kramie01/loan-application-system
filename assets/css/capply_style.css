@@ -280,3 +280,21 @@ textarea:required {
   transform: translateY(0);
   background-color: #128de5; /* Slightly different shade when clicked */
 }
+
+.form-cancel-btn {
+  background-color: #e74c3c; /* Red */
+  color: #ffffff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: auto; /* Optional: helps with alignment if in flex container */
+}
+
+.form-cancel-btn:hover {
+  background-color: #c0392b; /* Darker red on hover */
+  transform: translateY(2px);
+}

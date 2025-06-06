@@ -1,7 +1,45 @@
 <?php
 session_start();
-include '../includes/config.php';
+//Validate if the user is logged in
+if (!isset($_SESSION['email'])) {
+    header('Location: ../pages/home_page.php');
+    exit();
+}
 
+//Configures and establishes database connection
+include '../includes/config.php';
+list($hostName, $port) = explode(':', $host);
+$charset = 'utf8mb4';
+
+$dsn = "mysql:host=$hostName;port=$port;dbname=$database;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+];
+
+try {
+    $pdo = new PDO($dsn, $user, $password, $options);
+    
+    // Get email from session
+    $emailAdrs = $_SESSION['email'];
+    
+    // Get applicant ID
+    $stmt = $pdo->prepare("SELECT applicantID FROM applicant_info WHERE emailAdrs = ?");
+    $stmt->execute([$emailAdrs]);
+    $applicant = $stmt->fetch();
+    
+    $profile = [];
+    if ($applicant) {
+        // Fetch all profile data of the user
+        $stmt = $pdo->prepare("SELECT * FROM applicant_info WHERE applicantID = ?");
+        $stmt->execute([$applicant['applicantID']]);
+        $profile = $stmt->fetchAll();
+    }
+} catch (PDOException $e) {
+    $error = "Database error: " . $e->getMessage();
+}
+
+// Double checks if an account is logged in
 if (!isset($_SESSION['applicant_id'])) {
     die('Error: No applicant ID found. Please login first.');
 }
@@ -48,7 +86,7 @@ while ($row = $cardResult->fetch_assoc()) {
     <h1>Cashalo - Loan Application System</h1>
   </header>
 
-  <div class="main-container">
+<div class="main-container">
     <!-- Sidebar Navigation -->
     <div class="sidebar">
       <a href="../pages/cdashboard_page.php">Dashboard</a>
@@ -59,14 +97,17 @@ while ($row = $cardResult->fetch_assoc()) {
     </div>
 
   <div class="content">
-      <h1>Client Profile</h1>
-      <p>Here is your profile</p>
+      <h1>Update Profile</h1>
+      <p>Edit your profile</p>
 
+      <form id="updateLoanForm" method="POST" action="../auth/update_profile.php"> 
         <!-- Applicant Information -->
         <div class="form-section">
           <h2>Applicant Information</h2>
-          <div class="form-group">
-            <label for="bankAccountNumber">Bank Account Number</label>
+        <div class="form-group">
+
+      
+      <label for="bankAccountNumber">Bank Account Number</label>
       <input id="bankAccountNumber" name="bankAccountNumber" value="<?= htmlspecialchars($applicant['bankAccountNumber'] ?? '') ?>" readonly />
 
       <label for="emailAdrs">Email Address</label>
@@ -107,7 +148,7 @@ while ($row = $cardResult->fetch_assoc()) {
       <input id="nationality" name="nationality" value="<?= htmlspecialchars($applicant['nationality'] ?? '') ?>" readonly />
 
       <label for="dependentsNum">Number of Dependents</label>
-      <input id="dependentsNum" type="number" name="dependentsNum" value="<?= htmlspecialchars($applicant['dependentsNum'] ?? '') ?>" readonly />
+      <input id="dependentsNum" type="number" name="dependentsNum" value="<?= htmlspecialchars($applicant['dependentsNum'] ?? '') ?>"/>
 
       <label for="educAttainment">Educational Attainment</label>
       <select id="educAttainment" name="educAttainment" disabled>
@@ -119,19 +160,19 @@ while ($row = $cardResult->fetch_assoc()) {
       </select>
 
       <label for="homePNum">Home Phone Number</label>
-      <input id="homePNum" name="homePNum" value="<?= htmlspecialchars($applicant['homePNum'] ?? '') ?>" readonly />
+      <input id="homePNum" name="homePNum" value="<?= htmlspecialchars($applicant['homePNum'] ?? '') ?>" readonly/>
 
       <label for="mobilePNum">Mobile Phone Number</label>
-      <input id="mobilePNum" name="mobilePNum" value="<?= htmlspecialchars($applicant['mobilePNum'] ?? '') ?>" readonly />
+      <input id="mobilePNum" name="mobilePNum" value="<?= htmlspecialchars($applicant['mobilePNum'] ?? '') ?>" readonly/>
 
       <label for="presentHomeAdrs">Present Home Address</label>
-      <textarea id="presentHomeAdrs" name="presentHomeAdrs" readonly><?= htmlspecialchars($applicant['presentHomeAdrs'] ?? '') ?></textarea>
+      <textarea id="presentHomeAdrs" name="presentHomeAdrs" ><?= htmlspecialchars($applicant['presentHomeAdrs'] ?? '') ?></textarea>
 
       <label for="lengthOfStay">Length of Stay</label>
-      <input id="lengthOfStay" name="lengthOfStay" value="<?= htmlspecialchars($applicant['lengthOfStay'] ?? '') ?>" readonly />
+      <input id="lengthOfStay" name="lengthOfStay" value="<?= htmlspecialchars($applicant['lengthOfStay'] ?? '') ?>" />
 
       <label for="adrsStatus">Address Status</label>
-      <select id="adrsStatus" name="adrsStatus" disabled>
+      <select id="adrsStatus" name="adrsStatus">
         <option value="">-- Select Address Status --</option>
         <option value="Owned" <?= $applicant['adrsStatus'] === 'Owned' ? 'selected' : '' ?>>Owned</option>
         <option value="Living with Relatives" <?= $applicant['adrsStatus'] === 'Living with Relatives' ? 'selected' : '' ?>>Living with Relatives</option>
@@ -140,9 +181,34 @@ while ($row = $cardResult->fetch_assoc()) {
       </select>
 
       <label for="monthlyPay">Monthly Pay</label>
-      <input id="monthlyPay" name="monthlyPay" value="<?= htmlspecialchars($applicant['monthlyPay'] ?? '') ?>" readonly />
-          </div>
-        </div>
+      <input id="monthlyPay" name="monthlyPay" value="<?= htmlspecialchars($applicant['monthlyPay'] ?? '') ?>" 
+      <?= ($applicant['adrsStatus'] !== 'Mortgaged' && $applicant['adrsStatus'] !== 'Renting') ? 'disabled' : '' ?> />
+
+      <script>
+        const adrsStatus = document.getElementById('adrsStatus');
+        const monthlyPay = document.getElementById('monthlyPay');
+
+        function toggleMonthlyPay() {
+            if (adrsStatus.value === 'Mortgaged') {
+                monthlyPay.disabled = false;  // enable input
+            }
+            else if (adrsStatus.value === 'Renting') {
+                monthlyPay.disabled = false;  // enable input
+            } else {
+                monthlyPay.disabled = true;   // disable input
+                monthlyPay.value = '';        // optionally clear value
+            }
+        }
+
+        // Run on page load in case the value is pre-selected
+        toggleMonthlyPay();
+
+        // Add event listener to toggle on change
+        adrsStatus.addEventListener('change', toggleMonthlyPay);
+      </script>
+    </div>
+</div>
+        
 
         <!-- Employment Information -->
         <div class="form-section">
@@ -152,13 +218,13 @@ while ($row = $cardResult->fetch_assoc()) {
             <input id="tinNumber" name="tinNumber" value="<?= htmlspecialchars($applicant['tinNumber'] ?? '') ?>" readonly />
 
             <label for="employerName">Employer Name</label>
-            <input id="employerName" name="employerName" value="<?= htmlspecialchars($applicant['employerName'] ?? '') ?>" readonly />
+            <input id="employerName" name="employerName" value="<?= htmlspecialchars($applicant['employerName'] ?? '') ?>" />
 
             <label for="employerAdd">Employer Address</label>
-            <input id="employerAdd" name="employerAdd" value="<?= htmlspecialchars($applicant['employerAdd'] ?? '') ?>" readonly />
+            <input id="employerAdd" name="employerAdd" value="<?= htmlspecialchars($applicant['employerAdd'] ?? '') ?>" />
 
             <label for="typeOfEmploy">Type of Employment</label>
-            <select id="typeOfEmploy" name="typeOfEmploy" disabled>
+            <select id="typeOfEmploy" name="typeOfEmploy" >
               <option value="">-- Select --</option>
               <option value="Private" <?= $applicant['typeOfEmploy'] === 'Private' ? 'selected' : '' ?>>Private</option>
               <option value="Government" <?= $applicant['typeOfEmploy'] === 'Government' ? 'selected' : '' ?>>Government</option>
@@ -169,7 +235,7 @@ while ($row = $cardResult->fetch_assoc()) {
             </select>
 
             <label for="employStatus">Employment Status</label>
-            <select id="employStatus" name="employStatus" disabled>
+            <select id="employStatus" name="employStatus" >
               <option value="">-- Select --</option>
               <option value="Permanent" <?= $applicant['employStatus'] === 'Permanent' ? 'selected' : '' ?>>Permanent</option>
               <option value="Probationary" <?= $applicant['employStatus'] === 'Probationary' ? 'selected' : '' ?>>Probationary</option>
@@ -180,7 +246,7 @@ while ($row = $cardResult->fetch_assoc()) {
             </select>
 
             <label for="rank">Rank</label>
-            <select id="rank" name="rank" disabled>
+            <select id="rank" name="rank">
               <option value="">-- Select --</option>
               <option value="Rank & File" <?= $applicant['rank'] === 'Rank & File' ? 'selected' : '' ?>>Rank & File</option>
               <option value="Junior Officer" <?= $applicant['rank'] === 'Junior Officer' ? 'selected' : '' ?>>Junior Officer</option>
@@ -196,43 +262,43 @@ while ($row = $cardResult->fetch_assoc()) {
             </div>
 
             <label for="curPosition">Current Position</label>
-            <input id="curPosition" name="curPosition" value="<?= htmlspecialchars($applicant['curPosition'] ?? '') ?>" readonly />
+            <input id="curPosition" name="curPosition" value="<?= htmlspecialchars($applicant['curPosition'] ?? '') ?>" />
 
             <label for="sssNum">SSS Number</label>
             <input id="sssNum" name="sssNum" value="<?= htmlspecialchars($applicant['sssNum'] ?? '') ?>" readonly />
 
             <label for="dateOfHire">Date of Hire</label>
-            <input id="dateOfHire" type="date" name="dateOfHire" value="<?= htmlspecialchars($applicant['dateOfHire'] ?? '') ?>" readonly />
+            <input id="dateOfHire" type="date" name="dateOfHire" value="<?= htmlspecialchars($applicant['dateOfHire'] ?? '') ?>"  />
 
             <label for="curLengthService">Current Length of Service</label>
-            <input id="curLengthService" name="curLengthService" value="<?= htmlspecialchars($applicant['curLengthService'] ?? '') ?>" readonly />
+            <input id="curLengthService" name="curLengthService" value="<?= htmlspecialchars($applicant['curLengthService'] ?? '') ?>"  />
 
             <label for="officeNum">Office Number</label>
-            <input id="officeNum" name="officeNum" value="<?= htmlspecialchars($applicant['officeNum'] ?? '') ?>" readonly />
+            <input id="officeNum" name="officeNum" value="<?= htmlspecialchars($applicant['officeNum'] ?? '') ?>"  />
 
             <label for="officeEmailAdd">Office Email Address</label>
-            <input id="officeEmailAdd" type="email" name="officeEmailAdd" value="<?= htmlspecialchars($applicant['officeEmailAdd'] ?? '') ?>" readonly />
+            <input id="officeEmailAdd" type="email" name="officeEmailAdd" value="<?= htmlspecialchars($applicant['officeEmailAdd'] ?? '') ?>"  />
 
             <label for="hrContactPerson">HR Contact Person</label>
-            <input id="hrContactPerson" name="hrContactPerson" value="<?= htmlspecialchars($applicant['hrContactPerson'] ?? '') ?>" readonly />
+            <input id="hrContactPerson" name="hrContactPerson" value="<?= htmlspecialchars($applicant['hrContactPerson'] ?? '') ?>"  />
 
             <label for="officeTelNum">Office Telephone Number</label>
-            <input id="officeTelNum" name="officeTelNum" value="<?= htmlspecialchars($applicant['officeTelNum'] ?? '') ?>" readonly />
+            <input id="officeTelNum" name="officeTelNum" value="<?= htmlspecialchars($applicant['officeTelNum'] ?? '') ?>"  />
 
             <label for="dayToCall">Best Day to Call</label>
-            <input id="dayToCall" name="dayToCall" value="<?= htmlspecialchars($applicant['dayToCall'] ?? '') ?>" readonly />
+            <input id="dayToCall" name="dayToCall" value="<?= htmlspecialchars($applicant['dayToCall'] ?? '') ?>"  />
 
             <label for="prevEmployer">Previous Employer</label>
-            <input id="prevEmployer" name="prevEmployer" value="<?= htmlspecialchars($applicant['prevEmployer'] ?? '') ?>" readonly />
+            <input id="prevEmployer" name="prevEmployer" value="<?= htmlspecialchars($applicant['prevEmployer'] ?? '') ?>"  />
 
             <label for="prevLengthService">Previous Length of Service</label>
-            <input id="prevLengthService" name="prevLengthService" value="<?= htmlspecialchars($applicant['prevLengthService'] ?? '') ?>" readonly />
+            <input id="prevLengthService" name="prevLengthService" value="<?= htmlspecialchars($applicant['prevLengthService'] ?? '') ?>"  />
 
             <label for="prevPosition">Previous Position</label>
-            <input id="prevPosition" name="prevPosition" value="<?= htmlspecialchars($applicant['prevPosition'] ?? '') ?>" readonly />
+            <input id="prevPosition" name="prevPosition" value="<?= htmlspecialchars($applicant['prevPosition'] ?? '') ?>"  />
 
             <label for="totalYrsWorking">Total Years Working</label>
-            <input id="totalYrsWorking" name="totalYrsWorking" value="<?= htmlspecialchars($applicant['totalYrsWorking'] ?? '') ?>" readonly />
+            <input id="totalYrsWorking" name="totalYrsWorking" value="<?= htmlspecialchars($applicant['totalYrsWorking'] ?? '') ?>" />
           </div>
         </div>
 
@@ -255,12 +321,16 @@ while ($row = $cardResult->fetch_assoc()) {
               <input id="expiryDate_<?= $index ?>" type="date" name="expiryDate[]" value="<?= htmlspecialchars($card['expiryDate'] ?? '') ?>" required readonly />
             </div>
           <?php endforeach; ?>
+
+          <div style="display: flex; justify-content: space-between; gap: 12px;">
+            <button type="submit" class="form-submit-btn" onclick="window.location.href='cprofile_page.php'">Save Changes</button>
+            <button type="button" class="form-cancel-btn" onclick="window.location.href='cprofile_page.php'">Cancel</button>
+          </div>
+
+          </form>
         </div>
       </div>
 
-    <a href="edit_profile_page.php">
-      <button type="submit" class="form-submit-btn">Update Profile</button>
-    </a>
 
 </body>
 </html>
