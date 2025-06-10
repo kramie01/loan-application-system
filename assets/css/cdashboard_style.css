@@ -94,14 +94,14 @@ header h1 {
 }
 
 /* Loan Summary Cards */
-.loan-summary {
+.summary {
   display: flex;
   gap: 25px;
-  margin-top: 40px;
+  margin-top: 10px;
   flex-wrap: wrap;
 }
 
-.loan-summary .card {
+.summary .card {
   background-color: #fff;
   padding: 25px;
   border-radius: 12px;
@@ -112,18 +112,172 @@ header h1 {
   transition: transform 0.3s ease;
 }
 
-.loan-summary .card:hover {
+.summary .card:hover {
   transform: translateY(-5px);
 }
 
-.loan-summary .card h2 {
+.summary .card h2 {
   font-size: 18px;
   color: #333;
   margin-bottom: 12px;
 }
 
-.loan-summary .card p {
+.summary .card p {
   font-size: 32px;
   font-weight: bold;
   color: #153851;
+}
+
+/* Logo */
+.logo {
+  width: 350px;
+  height: 320px;
+  margin: 0 auto 5px;
+  display: block;
+}
+
+/* LendEase Title */
+.loan-name {
+  background-color: #153851;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 40px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Tagline */
+.tagline {
+  font-size: 25px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+/* Section Headings */
+.about-us, .goals, .vision, .mission, .loan-status, .contact-us {
+  font-size: 28px;
+  font-weight: 600;
+  color: #153851;
+  margin: 40px 0 20px;
+  text-align: left;
+}
+
+/* About Us */
+.description {
+  text-align: left;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+/* Goals */
+.goal-description {
+  text-align: left;
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+/* Vision and Mission */
+.vision-description, .mission-description {
+  text-align: left;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+/* Contact Us Section with Specific Icons */
+.contact-us + p {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 17px;
+  color: #444;
+}
+
+/* Gmail Icon */
+.contact-us + p::before {
+  content: 'G';
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  background-color: #153851;
+  margin-right: 15px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  line-height: 1;
+}
+
+/* Outlook Icon */
+.contact-us + p + p {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 17px;
+  color: #444;
+}
+
+.contact-us + p + p::before {
+  content: 'O';
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  background-color: #153851;
+  margin-right: 15px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  line-height: 1;
+}
+
+/* Phone Icon */
+.contact-us + p + p + p {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 17px;
+  color: #444;
+}
+
+.contact-us + p + p + p::before {
+  content: '';
+  margin-right: 15px;
+  width: 28px;
+  height: 28px;
+  background-color: #153851;
+  border-radius: 50%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z'/%3E%3C/svg%3E");
+  background-size: 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Facebook Icon */
+.contact-us + p + p + p + p {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: 17px;
+  color: #444;
+}
+
+.contact-us + p + p + p + p::before {
+  content: 'f';
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  background-color: #153851;
+  margin-right: 15px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  line-height: 1;
 }

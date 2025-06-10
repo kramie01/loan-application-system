@@ -30,7 +30,7 @@ try {
     $loans = [];
     if ($applicant) {
         // Get all loans for this applicant
-        $stmt = $pdo->prepare("SELECT loan_id, loanAmount, paymentTerm, loanPurpose, status 
+        $stmt = $pdo->prepare("SELECT loan_id, loanAmount, paymentTerm, loanPurpose, status
                               FROM loan_info 
                               WHERE applicantID = ?");
         $stmt->execute([$applicant['applicantID']]);
@@ -54,7 +54,7 @@ try {
 <body>
     <header>
         <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
-        <h1>Cashalo - Loan Application System</h1>
+        <h1>LendEase - Loan Application System</h1>
     </header>
 
     <div class="main-container">
@@ -62,7 +62,7 @@ try {
         <div class="sidebar">
             <a href="../pages/cdashboard_page.php">Dashboard</a>
             <a href="../pages/capply_loan_page.php">Apply for a Loan</a>
-            <a href="../pages/cloandetails_page.php" class="active">View Loan Details</a>
+            <a href="../pages/cloandetails_page.php">View Loan Details</a>
             <a href="../pages/cprofile_page.php">Profile</a>
             <a href="../auth/logout.php">Logout</a>
         </div>
@@ -71,12 +71,22 @@ try {
             <section class="loan-details-section">
                 <h3>Loan Information</h3>
                 
+                <?php if (isset($_SESSION['success'])): ?>
+                    <div class="success-message"><?php echo htmlspecialchars($_SESSION['success']); ?></div>
+                    <?php unset($_SESSION['success']); ?>
+                <?php endif; ?>
+                
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="error-message"><?php echo htmlspecialchars($_SESSION['error']); ?></div>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
+                
                 <?php if (isset($error)): ?>
                     <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
                 <?php elseif (empty($loans)): ?>
                     <div class="no-loans-message">
                         <p>You haven't applied for any loans yet.</p>
-                        <a href="../pages/capply_page.php" class="apply-btn">Apply for a Loan</a>
+                        <a href="../pages/capply_loan_page.php" class="apply-btn">Apply for a Loan</a>
                     </div>
                 <?php else: ?>
                     <div class="loan-table-container">
@@ -119,7 +129,11 @@ try {
                                                 <button class="btn btn-cancel" onclick="cancelLoan(<?php echo $loan['loan_id']; ?>)">
                                                     Cancel
                                                 </button>
-                                            <?php else: ?>
+                                            <?php elseif ($loan['status'] === 'Active'): ?>
+                                                <button class="btn btn-pay" onclick="payLoan(<?php echo $loan['loan_id']; ?>)">
+                                                    Pay
+                                                </button>
+                                            <?php elseif ($loan['status'] === 'Paid'): ?>
                                                 <span class="no-action">No actions available</span>
                                             <?php endif; ?>
                                         </td>
@@ -145,7 +159,7 @@ try {
                 
                 <div class="form-group">
                     <label for="updateLoanAmount">Loan Amount (₱):</label>
-                    <input type="number" id="updateLoanAmount" name="loanAmount" min="1000" max="500000" step="100" required>
+                    <input type="number" id="updateLoanAmount" name="loanAmount"required>
                 </div>
                 
                 <div class="form-group">
@@ -162,11 +176,18 @@ try {
                 <div class="form-group">
                     <label for="updateLoanPurpose">Loan Purpose:</label>
                     <select id="updateLoanPurpose" name="loanPurpose" required>
-                        <option value="Personal">Personal</option>
-                        <option value="Business">Business</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Appliance/s">Appliance/s</option>
+                        <option value="Furniture/Fixtures">Furniture/Fixtures</option>
+                        <option value="Electronic Gadgets">Electronic Gadgets</option>
+                        <option value="Personal Consumption">Personal Consumption</option>
+                        <option value="Hospitalization">Hospitalization</option>
+                        <option value="Health & Wellness">Health & Wellness</option>
                         <option value="Education">Education</option>
-                        <option value="Medical">Medical</option>
+                        <option value="Balance Transfer">Balance Transfer</option>
+                        <option value="Special Events">Special Events</option>
                         <option value="Home Improvement">Home Improvement</option>
+                        <option value="Car Repair">Car Repair</option>
                         <option value="Others">Others</option>
                     </select>
                 </div>
@@ -179,6 +200,56 @@ try {
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeUpdateModal()">Cancel</button>
                     <button type="submit" class="btn btn-primary">Update Loan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Payment Confirmation Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Confirm Payment</h4>
+                <span class="close" onclick="closePaymentModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to mark this loan as paid? This action cannot be undone.</p>
+            </div>
+            <form id="payLoanForm" method="POST" action="../auth/pay_loan.php">
+                <input type="hidden" id="payLoanId" name="loanId">
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closePaymentModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Confirm Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+        <!-- Cancel Loan Confirmation Modal -->
+    <div id="cancelModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header cancel-header">
+                <h4>Cancel Loan Application</h4>
+                <span class="close" onclick="closeCancelModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="warning-icon">⚠️</div>
+                <p><strong>Are you sure you want to cancel this loan application?</strong></p>
+                <div class="cancel-warning">
+                    <p>This action will:</p>
+                    <ul>
+                        <li>Permanently delete your loan application</li>
+                        <li>Remove all associated loan data</li>
+                        <li>Cannot be undone once confirmed</li>
+                    </ul>
+                    <p class="warning-text">You will need to submit a new application if you want to apply for a loan again.</p>
+                </div>
+            </div>
+            <form id="cancelLoanForm" method="POST" action="../auth/cancel_loan.php">
+                <input type="hidden" id="cancelLoanId" name="loanId">
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeCancelModal()">Keep Loan</button>
+                    <button type="submit" class="btn btn-danger">Yes, Cancel Loan</button>
                 </div>
             </form>
         </div>

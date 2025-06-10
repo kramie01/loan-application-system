@@ -45,30 +45,45 @@ function toggleOtherPurposeField() {
 }
 
 function cancelLoan(loan_id) {
-  if (confirm("Are you sure you want to cancel this loan application? This action cannot be undone.")) {
-    // Create a form to submit the cancellation
-    const form = document.createElement("form")
-    form.method = "POST"
-    form.action = "../auth/cancel_loan.php"
+  const modal = document.getElementById("cancelModal")
+  document.getElementById("cancelLoanId").value = loan_id
+  modal.style.display = "block"
+}
 
-    const loanIdInput = document.createElement("input")
-    loanIdInput.type = "hidden"
-    loanIdInput.name = "loanId"
-    loanIdInput.value = loan_id
+function closeCancelModal() {
+  const modal = document.getElementById("cancelModal")
+  modal.style.display = "none"
+}
 
-    form.appendChild(loanIdInput)
-    document.body.appendChild(form)
-    form.submit()
-  }
+function payLoan(loan_id) {
+  const modal = document.getElementById("paymentModal")
+  document.getElementById("payLoanId").value = loan_id
+  modal.style.display = "block"
+}
+
+function closePaymentModal() {
+  const modal = document.getElementById("paymentModal")
+  modal.style.display = "none"
 }
 
 // Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
-  // Close modal when clicking outside
+  // Close modals when clicking outside
   window.onclick = (event) => {
-    const modal = document.getElementById("updateModal")
-    if (event.target === modal) {
+    const updateModal = document.getElementById("updateModal")
+    const paymentModal = document.getElementById("paymentModal")
+    const cancelModal = document.getElementById("cancelModal")
+
+    if (event.target === updateModal) {
       closeUpdateModal()
+    }
+
+    if (event.target === paymentModal) {
+      closePaymentModal()
+    }
+
+    if (event.target === cancelModal) {
+      closeCancelModal()
     }
   }
 
@@ -78,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     purposeSelect.addEventListener("change", toggleOtherPurposeField)
   }
 
-  // Form validation
+  // Form validation for update form
   const updateForm = document.getElementById("updateLoanForm")
   if (updateForm) {
     updateForm.addEventListener("submit", (e) => {
@@ -99,6 +114,16 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault()
         return
       }
+    })
+  }
+
+  // Form validation for cancel form
+  const cancelForm = document.getElementById("cancelLoanForm")
+  if (cancelForm) {
+    cancelForm.addEventListener("submit", (e) => {
+      const submitBtn = cancelForm.querySelector(".btn-danger")
+      submitBtn.textContent = "Cancelling..."
+      submitBtn.disabled = true
     })
   }
 })

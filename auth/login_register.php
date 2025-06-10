@@ -92,7 +92,7 @@ class AuthHandler {
             $profileResult = $stmt->get_result();
             
             if ($profileResult->num_rows === 0) {
-                $_SESSION['complete_profile_msg'] = "Please complete your profile.";
+                $_SESSION['complete_profile_msg'] = "Please complete your profile first.";
                 header("Location: ../pages/ccomplete_profile_page.php");
             } else {
                 $profile = $profileResult->fetch_assoc();

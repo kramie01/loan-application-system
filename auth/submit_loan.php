@@ -14,11 +14,12 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $password, $options);
 
-    // ✅ Get email from session
+    // Get email from session
     $emailAdrs = $_SESSION['email'] ?? null;
 
     if (!$emailAdrs) {
-        echo "Email address not provided in session. Please log in again.";
+        $_SESSION['error'] = "Email address not provided in session. Please log in again.";
+        header("Location: ../pages/capply_loan_page.php");
         exit();
     }
 
@@ -30,39 +31,62 @@ try {
     if ($applicant) {
         $applicantID = $applicant['applicantID'];
 
-        // Check for active loans
-        $stmt = $pdo->prepare("SELECT status FROM loan_info WHERE applicantID = ? AND status NOT IN ('Paid', 'Cancelled')");
+        // Check for active loans (updated to match new status system)
+        $stmt = $pdo->prepare("SELECT status FROM loan_info WHERE applicantID = ? AND status IN ('Pending', 'Active')");
         $stmt->execute([$applicantID]);
         $activeLoan = $stmt->fetch();
 
         if ($activeLoan) {
-            echo "You already have an active loan. Please settle it before applying again.";
+            $_SESSION['error'] = "You already have an active loan. Please settle it before applying again.";
+            header("Location: ../pages/capply_loan_page.php");
             exit();
         }
     } else {
-        echo "No applicant profile found. Please complete your profile first.";
+        $_SESSION['error'] = "No applicant profile found. Please complete your profile first.";
+        header("Location: ../pages/capply_loan_page.php");
         exit();
     }
 
-    // ✅ Loan Purpose
-    $loanPurpose = $_POST['loanPurpose'] ?? '';
-    if ($loanPurpose === 'Others' && !empty($_POST['otherLoanPurpose'])) {
-        $loanPurpose = $_POST['otherLoanPurpose'];
+    // Validate form data
+    $loanAmount = $_POST['loanAmount'] ?? null;
+    $paymentTerm = $_POST['paymentTerm'] ?? null;
+    $loanPurpose = $_POST['loanPurpose'] ?? null;
+    $otherLoanPurpose = $_POST['otherLoanPurpose'] ?? null;
+
+    // Validate required fields
+    if (!$loanAmount || !$paymentTerm || !$loanPurpose) {
+        $_SESSION['error'] = "All fields are required.";
+        header("Location: ../pages/capply_loan_page.php");
+        exit();
     }
 
-    // ✅ Insert loan record
+    // Loan Purpose
+    if ($loanPurpose === 'Others' && !empty($otherLoanPurpose)) {
+        $loanPurpose = $otherLoanPurpose;
+    } elseif ($loanPurpose === 'Others' && empty($otherLoanPurpose)) {
+        $_SESSION['error'] = "Please specify the loan purpose.";
+        header("Location: ../pages/capply_loan_page.php");
+        exit();
+    }
+
+    // Insert loan record
     $stmt = $pdo->prepare("INSERT INTO loan_info 
         (loanAmount, paymentTerm, loanPurpose, applicantID, status) 
         VALUES (?, ?, ?, ?, 'Pending')");
     $stmt->execute([
-        $_POST['loanAmount'],
-        $_POST['paymentTerm'],
+        $loanAmount,
+        $paymentTerm,
         $loanPurpose,
         $applicantID
     ]);
 
-    header("Location: ../pages/loan_submitted_page.php");
+    // Set success message and redirect with success parameter
+    $_SESSION['success'] = "Your loan application has been submitted successfully!";
+    header("Location: ../pages/capply_loan_page.php?success=true");
     exit();
 } catch (PDOException $e) {
-    echo "Database error: " . $e->getMessage();
+    $_SESSION['error'] = "Database error: " . $e->getMessage();
+    header("Location: ../pages/capply_loan_page.php");
+    exit();
 }
+?>

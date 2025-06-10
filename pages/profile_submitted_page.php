@@ -20,9 +20,9 @@ if (!isset($_SESSION['email'])) {
 
 <body style="background: #fff;">
 
-<div class="box">
-  <h1>CONGRATS!</h1>
-  <p>Your profile is submitted!</p>
+<div class="modal-content success">
+  <h3>CONGRATS!</h3>
+  <p>Your profile has been successfully completed. <br> Please log in again to access your account.</p>
   <button onclick="window.location.href='../pages/home_page.php'">Login Again</button>
 </div>
 

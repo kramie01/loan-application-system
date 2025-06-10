@@ -39,13 +39,6 @@ try {
         $loanPurpose = $otherLoanPurpose;
     }
     
-    // Validate loan amount
-    if ($loanAmount < 1000 || $loanAmount > 500000) {
-        $_SESSION['error'] = "Loan amount must be between ₱1,000 and ₱500,000.";
-        header('Location: ../pages/cloandetails_page.php');
-        exit();
-    }
-    
     // Get email from session
     $emailAdrs = $_SESSION['email'];
     

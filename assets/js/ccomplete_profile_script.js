@@ -1,4 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Function to convert input to uppercase with exceptions
+  function convertToUppercase(input) {
+    // Skip certain input types that shouldn't be uppercase
+    const skipTypes = ['email', 'password', 'date', 'time', 'datetime-local', 'number', 'tel'];
+    
+    if (!skipTypes.includes(input.type.toLowerCase())) {
+      input.addEventListener('input', function() {
+        const cursorPosition = this.selectionStart;
+        this.value = this.value.toUpperCase();
+        this.setSelectionRange(cursorPosition, cursorPosition);
+      });
+    }
+  }
+
+  // Convert all existing text inputs to uppercase
+  const allInputs = document.querySelectorAll('input, textarea');
+  allInputs.forEach(convertToUppercase);
+
   // Rank toggle logic
   const rank = document.getElementById('rank');
   const otherRankContainer = document.getElementById('otherRankContainer');
@@ -41,6 +59,11 @@ document.addEventListener("DOMContentLoaded", function () {
     `;
 
     container.appendChild(newGroup);
+
+    // Apply uppercase conversion to newly added inputs
+    const newInputs = newGroup.querySelectorAll('input, textarea');
+    newInputs.forEach(convertToUppercase);
+
     cardIndex++;
   });
 

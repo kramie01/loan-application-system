@@ -83,7 +83,7 @@ while ($row = $cardResult->fetch_assoc()) {
 
 <header>
     <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
-    <h1>Cashalo - Loan Application System</h1>
+    <h1>LendEase - Loan Application System</h1>
   </header>
 
 <div class="main-container">
@@ -130,18 +130,18 @@ while ($row = $cardResult->fetch_assoc()) {
 
       <label for="civilStatus">Civil Status</label>
       <select id="civilStatus" name="civilStatus" disabled>
-        <option value="">-- Select Civil Status --</option>
-        <option value="Single" <?= $applicant['civilStatus'] === 'Single' ? 'selected' : '' ?>>Single</option>
-        <option value="Married" <?= $applicant['civilStatus'] === 'Married' ? 'selected' : '' ?>>Married</option>
-        <option value="Legally Separated" <?= $applicant['civilStatus'] === 'Legally Separated' ? 'selected' : '' ?>>Legally Separated</option>
-        <option value="Widow / Widower" <?= $applicant['civilStatus'] === 'Widow / Widower' ? 'selected' : '' ?>>Widow / Widower</option>
+        <option value="">-- SELECT CIVIL STATUS --</option>
+        <option value="Single" <?= $applicant['civilStatus'] === 'Single' ? 'selected' : '' ?>>SINGLE</option>
+        <option value="Married" <?= $applicant['civilStatus'] === 'Married' ? 'selected' : '' ?>>MARRIED</option>
+        <option value="Legally Separated" <?= $applicant['civilStatus'] === 'Legally Separated' ? 'selected' : '' ?>>LEGALLY SEPARATED</option>
+        <option value="Widow / Widower" <?= $applicant['civilStatus'] === 'Widow / Widower' ? 'selected' : '' ?>>WIDOW / WIDOWER</option>
       </select>
 
       <label for="gender">Gender</label>
       <select id="gender" name="gender" disabled>
-        <option value="">-- Select Gender --</option>
-        <option value="Male" <?= $applicant['gender'] === 'M' ? 'selected' : '' ?>>Male</option>
-        <option value="Female" <?= $applicant['gender'] === 'F' ? 'selected' : '' ?>>Female</option>
+        <option value="">-- SELECT GENDER --</option>
+        <option value="Male" <?= $applicant['gender'] === 'M' ? 'selected' : '' ?>>MALE</option>
+        <option value="Female" <?= $applicant['gender'] === 'F' ? 'selected' : '' ?>>FEMALE</option>
       </select>
 
       <label for="nationality">Nationality</label>
@@ -152,11 +152,11 @@ while ($row = $cardResult->fetch_assoc()) {
 
       <label for="educAttainment">Educational Attainment</label>
       <select id="educAttainment" name="educAttainment" disabled>
-        <option value="">-- Select Educational Attainment --</option>
-        <option value="High School" <?= $applicant['educAttainment'] === 'High School' ? 'selected' : '' ?>>High School</option>
-        <option value="College" <?= $applicant['educAttainment'] === 'College' ? 'selected' : '' ?>>College</option>
-        <option value="Vocational" <?= $applicant['educAttainment'] === 'Vocational' ? 'selected' : '' ?>>Vocational</option>
-        <option value="Postgraduate" <?= $applicant['educAttainment'] === 'Postgraduate' ? 'selected' : '' ?>>Postgraduate</option>
+        <option value="">-- SELECT EDUCATIONAL ATTAINMENT --</option>
+        <option value="High School" <?= $applicant['educAttainment'] === 'High School' ? 'selected' : '' ?>>HIGH SCHOOL</option>
+        <option value="College" <?= $applicant['educAttainment'] === 'College' ? 'selected' : '' ?>>COLLEGE</option>
+        <option value="Vocational" <?= $applicant['educAttainment'] === 'Vocational' ? 'selected' : '' ?>>VOCATIONAL</option>
+        <option value="Postgraduate" <?= $applicant['educAttainment'] === 'Postgraduate' ? 'selected' : '' ?>>POSTGRADUATE</option>
       </select>
 
       <label for="homePNum">Home Phone Number</label>
@@ -173,11 +173,11 @@ while ($row = $cardResult->fetch_assoc()) {
 
       <label for="adrsStatus">Address Status</label>
       <select id="adrsStatus" name="adrsStatus">
-        <option value="">-- Select Address Status --</option>
-        <option value="Owned" <?= $applicant['adrsStatus'] === 'Owned' ? 'selected' : '' ?>>Owned</option>
-        <option value="Living with Relatives" <?= $applicant['adrsStatus'] === 'Living with Relatives' ? 'selected' : '' ?>>Living with Relatives</option>
-        <option value="Renting" <?= $applicant['adrsStatus'] === 'Renting' ? 'selected' : '' ?>>Renting</option>
-        <option value="Mortgaged" <?= $applicant['adrsStatus'] === 'Mortgaged' ? 'selected' : '' ?>>Mortgaged</option>
+        <option value="">-- SELECT ADDRESS STATUS --</option>
+        <option value="Owned" <?= $applicant['adrsStatus'] === 'Owned' ? 'selected' : '' ?>>OWNED</option>
+        <option value="Living with Relatives" <?= $applicant['adrsStatus'] === 'Living with Relatives' ? 'selected' : '' ?>>LIVING WITH RELATIVES</option>
+        <option value="Renting" <?= $applicant['adrsStatus'] === 'Renting' ? 'selected' : '' ?>>RENITNG</option>
+        <option value="Mortgaged" <?= $applicant['adrsStatus'] === 'Mortgaged' ? 'selected' : '' ?>>MORTGAGED</option>
       </select>
 
       <label for="monthlyPay">Monthly Pay</label>
@@ -209,7 +209,6 @@ while ($row = $cardResult->fetch_assoc()) {
     </div>
 </div>
         
-
         <!-- Employment Information -->
         <div class="form-section">
           <h2>Employment Information</h2>
@@ -225,35 +224,35 @@ while ($row = $cardResult->fetch_assoc()) {
 
             <label for="typeOfEmploy">Type of Employment</label>
             <select id="typeOfEmploy" name="typeOfEmploy" >
-              <option value="">-- Select --</option>
-              <option value="Private" <?= $applicant['typeOfEmploy'] === 'Private' ? 'selected' : '' ?>>Private</option>
-              <option value="Government" <?= $applicant['typeOfEmploy'] === 'Government' ? 'selected' : '' ?>>Government</option>
-              <option value="Professional" <?= $applicant['typeOfEmploy'] === 'Professional' ? 'selected' : '' ?>>Professional</option>
-              <option value="Self-Employed" <?= $applicant['typeOfEmploy'] === 'Self-Employed' ? 'selected' : '' ?>>Self-Employed</option>
-              <option value="Unemployed" <?= $applicant['typeOfEmploy'] === 'Unemployed' ? 'selected' : '' ?>>Unemployed</option>
-              <option value="Retired" <?= $applicant['typeOfEmploy'] === 'Retired' ? 'selected' : '' ?>>Retired</option>
+              <option value="">-- SELECT --</option>
+              <option value="Private" <?= $applicant['typeOfEmploy'] === 'Private' ? 'selected' : '' ?>>PRIVATE</option>
+              <option value="Government" <?= $applicant['typeOfEmploy'] === 'Government' ? 'selected' : '' ?>>GOVERNMENT</option>
+              <option value="Professional" <?= $applicant['typeOfEmploy'] === 'Professional' ? 'selected' : '' ?>>PROFESSIONAL</option>
+              <option value="Self-Employed" <?= $applicant['typeOfEmploy'] === 'Self-Employed' ? 'selected' : '' ?>>SELF-EMPLOYED</option>
+              <option value="Unemployed" <?= $applicant['typeOfEmploy'] === 'Unemployed' ? 'selected' : '' ?>>UNEMPLOYED</option>
+              <option value="Retired" <?= $applicant['typeOfEmploy'] === 'Retired' ? 'selected' : '' ?>>RETIRED</option>
             </select>
 
             <label for="employStatus">Employment Status</label>
             <select id="employStatus" name="employStatus" >
-              <option value="">-- Select --</option>
-              <option value="Permanent" <?= $applicant['employStatus'] === 'Permanent' ? 'selected' : '' ?>>Permanent</option>
-              <option value="Probationary" <?= $applicant['employStatus'] === 'Probationary' ? 'selected' : '' ?>>Probationary</option>
-              <option value="Contractual" <?= $applicant['employStatus'] === 'Contractual' ? 'selected' : '' ?>>Contractual</option>
-              <option value="Professional" <?= $applicant['employStatus'] === 'Professional' ? 'selected' : '' ?>>Professional</option>
-              <option value="Consultant" <?= $applicant['employStatus'] === 'Consultant' ? 'selected' : '' ?>>Consultant</option>
-              <option value="Special Occupation" <?= $applicant['employStatus'] === 'Special Occupation' ? 'selected' : '' ?>>Special Occupation</option>
+              <option value="">-- SELECT --</option>
+              <option value="Permanent" <?= $applicant['employStatus'] === 'Permanent' ? 'selected' : '' ?>>PERMANENT</option>
+              <option value="Probationary" <?= $applicant['employStatus'] === 'Probationary' ? 'selected' : '' ?>>PROBATIONARY</option>
+              <option value="Contractual" <?= $applicant['employStatus'] === 'Contractual' ? 'selected' : '' ?>>CONTRACTUAL</option>
+              <option value="Professional" <?= $applicant['employStatus'] === 'Professional' ? 'selected' : '' ?>>PROFESSIONAL</option>
+              <option value="Consultant" <?= $applicant['employStatus'] === 'Consultant' ? 'selected' : '' ?>>CONSULTANT</option>
+              <option value="Special Occupation" <?= $applicant['employStatus'] === 'Special Occupation' ? 'selected' : '' ?>>SPECIAL OCCUPATION</option>
             </select>
 
             <label for="rank">Rank</label>
             <select id="rank" name="rank">
-              <option value="">-- Select --</option>
-              <option value="Rank & File" <?= $applicant['rank'] === 'Rank & File' ? 'selected' : '' ?>>Rank & File</option>
-              <option value="Junior Officer" <?= $applicant['rank'] === 'Junior Officer' ? 'selected' : '' ?>>Junior Officer</option>
-              <option value="Middle Manager" <?= $applicant['rank'] === 'Middle Manager' ? 'selected' : '' ?>>Middle Manager</option>
-              <option value="Senior Executive" <?= $applicant['rank'] === 'Senior Executive' ? 'selected' : '' ?>>Senior Executive</option>
-              <option value="Self-Employed" <?= $applicant['rank'] === 'Self-Employed' ? 'selected' : '' ?>>Self-Employed</option>
-              <option value="Others" <?= $applicant['rank'] === 'Others' ? 'selected' : '' ?>>Others</option>
+              <option value="">-- SELECT --</option>
+              <option value="Rank & File" <?= $applicant['rank'] === 'Rank & File' ? 'selected' : '' ?>>RANK & FILE</option>
+              <option value="Junior Officer" <?= $applicant['rank'] === 'Junior Officer' ? 'selected' : '' ?>>JUNIOR OFFICER</option>
+              <option value="Middle Manager" <?= $applicant['rank'] === 'Middle Manager' ? 'selected' : '' ?>>MIDDLE MANAGER</option>
+              <option value="Senior Executive" <?= $applicant['rank'] === 'Senior Executive' ? 'selected' : '' ?>>SENIOR EXECUTIVE</option>
+              <option value="Self-Employed" <?= $applicant['rank'] === 'Self-Employed' ? 'selected' : '' ?>>SELF-EMPLOYED</option>
+              <option value="Others" <?= $applicant['rank'] === 'Others' ? 'selected' : '' ?>>OTHERS</option>
             </select>
 
             <div id="otherRankContainer" style="<?= ($applicant['rank'] ?? '') === 'Others' ? 'display: block;' : 'display: none;' ?>; margin-top: 10px;">
@@ -331,6 +330,7 @@ while ($row = $cardResult->fetch_assoc()) {
         </div>
       </div>
 
+<script src="../assets/js/ccomplete_profile_script.js"></script>
 
 </body>
 </html>

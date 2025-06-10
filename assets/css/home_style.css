@@ -94,6 +94,13 @@ h2 {
   margin-top: 10px;
 }
 
+h3 {
+  font-size: 50px;
+  text-align: center;
+  margin-bottom: 15px;
+  color: #153851;
+}
+
 input {
   width: 100%;
   padding: 10px 12px;

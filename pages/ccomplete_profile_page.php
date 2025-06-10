@@ -21,17 +21,22 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
 <body>
 
 <?php if (isset($_SESSION['complete_profile_msg'])): ?>
-    <p style="color:blue;"><?php 
-        echo $_SESSION['complete_profile_msg']; 
-        unset($_SESSION['complete_profile_msg']); 
-    ?></p>
+    <!-- Ultra Simple Modal -->
+    <div id="modal" class="modal-overlay">
+        <div class="modal-content">
+            <p><?php echo $_SESSION['complete_profile_msg']; ?></p>
+            <button onclick="document.getElementById('modal').style.display='none'">OK</button>
+        </div>
+    </div>
+
+    <?php unset($_SESSION['complete_profile_msg']); ?>
 <?php endif; ?>
 
 <?php if (!empty($msg)) echo "<p style='color:green;'>$msg</p>"; ?>
 
   <header>
     <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
-    <h1>Cashalo - Loan Application System</h1>
+    <h1>LendEase - Loan Application System</h1>
   </header>
 
     <div class="content">
@@ -67,18 +72,18 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
 
             <label for="civilStatus">Civil Status</label>
             <select id="civilStatus" name="civilStatus">
-              <option value="">-- Select Civil Status --</option>
-              <option value="Single">Single</option>
-              <option value="Married">Married</option>
-              <option value="Legally Separated">Legally Separated</option>
-              <option value="Widow / Widower">Widow / Widower</option>
+              <option value="">-- SELECT CIVIL STATUS --</option>
+              <option value="Single">SINGLE</option>
+              <option value="Married">MARRIED</option>
+              <option value="Legally Separated">LEGALLY SEPERATED</option>
+              <option value="Widow / Widower">WIDOW / WIDOWER</option>
             </select>
 
             <label for="gender">Gender</label>
             <select id="gender" name="gender">
-              <option value="">-- Select Gender --</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
+              <option value="">-- SELECT GENDER --</option>
+              <option value="Male">MALE</option>
+              <option value="Female">FEMALE</option>
             </select>
 
             <label for="nationality">Nationality</label>
@@ -89,11 +94,11 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
 
             <label for="educAttainment">Educational Attainment</label>
             <select id="educAttainment" name="educAttainment">
-              <option value="">-- Select Educational Attainment --</option>
-              <option value="High School">High School</option>
-              <option value="College">College</option>
-              <option value="Vocational">Vocational</option>
-              <option value="Postgraduate">Postgraduate</option>
+              <option value="">-- SELECT EDUCATIONAL ATTAINMENT --</option>
+              <option value="High School">HIGH SCHOOL</option>
+              <option value="College">COLLEGE</option>
+              <option value="Vocational">VOCATIONAL</option>
+              <option value="Postgraduate">POSTGRADUATE</option>
             </select>
 
             <label for="homePNum">Home Phone Number</label>
@@ -122,6 +127,7 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
           </div>
         </div>
 
+            
         <!-- Employment Information -->
         <div class="form-section">
           <h2>Employment Information</h2>
@@ -137,35 +143,35 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
 
             <label for="typeOfEmploy">Type of Employment</label>
             <select id="typeOfEmploy" name="typeOfEmploy">
-              <option value="">-- Select --</option>
-              <option value="Private">Private</option>
-              <option value="Government">Government</option>
-              <option value="Professional">Professional</option>
-              <option value="Self-Employed">Self-Employed</option>
-              <option value="Unemployed">Unemployed</option>
-              <option value="Retired">Retired</option>
+              <option value="">-- SELECT --</option>
+              <option value="Private">PRIVATE</option>
+              <option value="Government">GOVERNMENT</option>
+              <option value="Professional">PROFESSIONAL</option>
+              <option value="Self-Employed">SELF-EMPLOYED</option>
+              <option value="Unemployed">UNEMPLOYED</option>
+              <option value="Retired">RETIRED</option>
             </select>
 
             <label for="employStatus">Employment Status</label>
             <select id="employStatus" name="employStatus">
-              <option value="">-- Select --</option>
-              <option value="Permanent">Permanent</option>
-              <option value="Probationary">Probationary</option>
-              <option value="Contractual">Contractual</option>
-              <option value="Professional">Professional</option>
-              <option value="Consultant">Consultant</option>
-              <option value="Special Occupation">Special Occupation</option>
+              <option value="">-- SELECT --</option>
+              <option value="Permanent">PERMANENT</option>
+              <option value="Probationary">PROBATIONARY</option>
+              <option value="Contractual">CONTRACTUAL</option>
+              <option value="Professional">PROFESSIONAL</option>
+              <option value="Consultant">CONSULTANT</option>
+              <option value="Special Occupation">SPECIA OCCUPATION</option>
             </select>
 
             <label for="rank">Rank</label>
             <select id="rank" name="rank">
-              <option value="">-- Select --</option>
-              <option value="Rank & File">Rank & File</option>
-              <option value="Junior Officer">Junior Officer</option>
-              <option value="Middle Manager">Middle Manager</option>
-              <option value="Senior Executive">Senior Executive</option>
-              <option value="Self-Employed">Self-Employed</option>
-              <option value="Others">Others</option>
+              <option value="">-- SELECT --</option>
+              <option value="Rank & File">RANK & FILE</option>
+              <option value="Junior Officer">JUNIOR OFFICER</option>
+              <option value="Middle Manager">MIDDLE MANAGER</option>
+              <option value="Senior Executive">SENIOR EXECUTIVE</option>
+              <option value="Self-Employed">SELF-EMPLOYED</option>
+              <option value="Others">OTHERS</option>
             </select>
 
             <div id="otherRankContainer" style="display: none; margin-top: 10px;">

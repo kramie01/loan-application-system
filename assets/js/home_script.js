@@ -45,11 +45,21 @@ document.addEventListener("DOMContentLoaded", () => {
     showLogin(role)
   }
 
-  // Add uppercase conversion to all input fields
-  const inputs = document.querySelectorAll('input[type="text"], input[type="email"]')
-  inputs.forEach((input) => {
-    input.addEventListener("input", function () {
-      this.value = this.value.toUpperCase()
-    })
-  })
+    // Function to convert input to uppercase with exceptions
+  function convertToUppercase(input) {
+    // Skip certain input types that shouldn't be uppercase
+    const skipTypes = ['email', 'password'];
+    
+    if (!skipTypes.includes(input.type.toLowerCase())) {
+      input.addEventListener('input', function() {
+        const cursorPosition = this.selectionStart;
+        this.value = this.value.toUpperCase();
+        this.setSelectionRange(cursorPosition, cursorPosition);
+      });
+    }
+  }
+
+  // Convert all existing text inputs to uppercase
+  const allInputs = document.querySelectorAll('input, textarea');
+  allInputs.forEach(convertToUppercase);
 })

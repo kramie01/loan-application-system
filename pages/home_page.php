@@ -28,7 +28,7 @@ function isActiveForm($formId, $activeForm) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cashalo - Home Login</title>
+    <title>LendEase - Home Login</title>
     <link rel="stylesheet" href="../assets/css/home_style.css">
 </head>
 <body data-login-role="<?= htmlspecialchars($loginRole ?? '') ?>">
@@ -38,7 +38,7 @@ function isActiveForm($formId, $activeForm) {
             <div class="icon">
                 <img src="../assets/images/lendease_white.png" alt="LoanTite Logo">
             </div>
-            <h1>CASHALO</h1>
+            <h1>LENDEASE</h1>
             <p>Get cash fast with a reliable loan service you can trust.</p>
         </div>
 

@@ -43,31 +43,30 @@ try {
         exit();
     }
     
-    // Verify that the loan belongs to this applicant and get loan details
-    $stmt = $pdo->prepare("SELECT loan_id, loanAmount, status FROM loan_info WHERE loan_id = ? AND applicantID = ?");
+    // Verify that the loan belongs to this applicant and is active
+    $stmt = $pdo->prepare("SELECT status FROM loan_info WHERE loan_id = ? AND applicantID = ?");
     $stmt->execute([$loan_id, $applicant['applicantID']]);
     $loan = $stmt->fetch();
     
     if (!$loan) {
-        $_SESSION['error'] = "Loan not found or you don't have permission to cancel it.";
+        $_SESSION['error'] = "Loan not found or you don't have permission to pay it.";
         header('Location: ../pages/cloandetails_page.php');
         exit();
     }
     
-    if ($loan['status'] !== 'Pending') {
-        $_SESSION['error'] = "Only pending loans can be cancelled.";
+    if ($loan['status'] !== 'Active') {
+        $_SESSION['error'] = "Only active loans can be paid.";
         header('Location: ../pages/cloandetails_page.php');
         exit();
     }
     
-    // Delete the loan from the database
-    $stmt = $pdo->prepare("DELETE FROM loan_info WHERE loan_id = ? AND applicantID = ?");
+    // Update loan status to paid
+    $stmt = $pdo->prepare("UPDATE loan_info 
+                          SET status = 'Paid'
+                          WHERE loan_id = ? AND applicantID = ?");
     $stmt->execute([$loan_id, $applicant['applicantID']]);
     
-    // Format loan ID for display
-    $formattedLoanId = 'L' . str_pad($loan['loan_id'], 3, '0', STR_PAD_LEFT);
-    
-    $_SESSION['success'] = "Loan application {$formattedLoanId} has been successfully cancelled and removed from the system.";
+    $_SESSION['success'] = "Loan has been successfully marked as paid.";
     header('Location: ../pages/cloandetails_page.php');
     exit();
     
