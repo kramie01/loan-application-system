@@ -46,7 +46,7 @@ try {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Client - Loan Details</title>
+    <title>Client - View Loan Details</title>
     <link rel="stylesheet" href="../assets/css/capply_style.css" />
     <link rel="stylesheet" href="../assets/css/cloandetails_style.css" />
 </head>
@@ -54,7 +54,7 @@ try {
 <body>
     <header>
         <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
-        <h1>LendEase - Loan Application System</h1>
+        <h1>LendEase - Client Loan Application System</h1>
     </header>
 
     <div class="main-container">
@@ -62,12 +62,15 @@ try {
         <div class="sidebar">
             <a href="../pages/cdashboard_page.php">Dashboard</a>
             <a href="../pages/capply_loan_page.php">Apply for a Loan</a>
-            <a href="../pages/cloandetails_page.php">View Loan Details</a>
+            <a href="../pages/cloandetails_page.php" class="active">Loan Details</a>
             <a href="../pages/cprofile_page.php">Profile</a>
             <a href="../auth/logout.php">Logout</a>
         </div>
 
         <div class="content">
+            <h1>Loan Details</h1>
+            <p>Here is your loan details, you can edit, update and cancel your application.</p>
+
             <section class="loan-details-section">
                 <h3>Loan Information</h3>
                 

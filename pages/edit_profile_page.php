@@ -75,7 +75,7 @@ while ($row = $cardResult->fetch_assoc()) {
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Client - Profile</title>
+  <title>Client - Edit Profile</title>
   <link rel="stylesheet" href="../assets/css/capply_style.css" />
  
 </head>
@@ -83,7 +83,7 @@ while ($row = $cardResult->fetch_assoc()) {
 
 <header>
     <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
-    <h1>LendEase - Loan Application System</h1>
+    <h1>LendEase - Client Loan Application System</h1>
   </header>
 
 <div class="main-container">
@@ -91,8 +91,8 @@ while ($row = $cardResult->fetch_assoc()) {
     <div class="sidebar">
       <a href="../pages/cdashboard_page.php">Dashboard</a>
       <a href="../pages/capply_loan_page.php">Apply for a Loan</a>
-      <a href="../pages/cloandetails_page.php">View Loan Details</a>
-      <a href="../pages/cprofile_page.php">Profile</a>
+      <a href="../pages/cloandetails_page.php">Loan Details</a>
+      <a href="../pages/cprofile_page.php" class="active">Profile</a>
       <a href="../auth/logout.php">Logout</a>
     </div>
 
@@ -106,115 +106,116 @@ while ($row = $cardResult->fetch_assoc()) {
           <h2>Applicant Information</h2>
         <div class="form-group">
 
-      
-      <label for="bankAccountNumber">Bank Account Number</label>
-      <input id="bankAccountNumber" name="bankAccountNumber" value="<?= htmlspecialchars($applicant['bankAccountNumber'] ?? '') ?>" readonly />
 
-      <label for="emailAdrs">Email Address</label>
-      <input id="emailAdrs" name="emailAdrs" type="email" value="<?= htmlspecialchars($applicant['emailAdrs'] ?? '') ?>" readonly />
+        <label for="bankAccountNumber">Bank Account Number</label>
+        <input id="bankAccountNumber" name="bankAccountNumber" value="<?= htmlspecialchars($applicant['bankAccountNumber'] ?? '') ?>" required readonly />
 
-      <label for="applicantName">Full Name</label>
-      <input id="applicantName" name="applicantName" value="<?= htmlspecialchars($applicant['applicantName'] ?? '') ?>" readonly />
+        <label for="emailAdrs">Email Address</label>
+        <input id="emailAdrs" name="emailAdrs" type="email" value="<?= htmlspecialchars($applicant['emailAdrs'] ?? '') ?>" required readonly />
 
-      <label for="motherMaidenName">Mother's Maiden Name</label>
-      <input id="motherMaidenName" name="motherMaidenName" value="<?= htmlspecialchars($applicant['motherMaidenName'] ?? '') ?>" readonly />
+        <label for="applicantName">Full Name</label>
+        <input id="applicantName" name="applicantName" value="<?= htmlspecialchars($applicant['applicantName'] ?? '') ?>" required readonly />
 
-      <label for="age">Age</label>
-      <input id="age" type="number" name="age" value="<?= htmlspecialchars($applicant['age'] ?? '') ?>" readonly />
+        <label for="motherMaidenName">Mother's Maiden Name</label>
+        <input id="motherMaidenName" name="motherMaidenName" value="<?= htmlspecialchars($applicant['motherMaidenName'] ?? '') ?>" required readonly />
 
-      <label for="birthDate">Birthdate</label>
-      <input id="birthDate" type="date" name="birthDate" value="<?= htmlspecialchars($applicant['birthDate'] ?? '') ?>" readonly />
+        <label for="age">Age</label>
+        <input id="age" type="number" name="age" value="<?= htmlspecialchars($applicant['age'] ?? '') ?>" required readonly />
 
-      <label for="birthPlace">Birthplace</label>
-      <input id="birthPlace" name="birthPlace" value="<?= htmlspecialchars($applicant['birthPlace'] ?? '') ?>" readonly />
+        <label for="birthDate">Birthdate</label>
+        <input id="birthDate" type="date" name="birthDate" value="<?= htmlspecialchars($applicant['birthDate'] ?? '') ?>" required readonly />
 
-      <label for="civilStatus">Civil Status</label>
-      <select id="civilStatus" name="civilStatus" disabled>
-        <option value="">-- SELECT CIVIL STATUS --</option>
-        <option value="Single" <?= $applicant['civilStatus'] === 'Single' ? 'selected' : '' ?>>SINGLE</option>
-        <option value="Married" <?= $applicant['civilStatus'] === 'Married' ? 'selected' : '' ?>>MARRIED</option>
-        <option value="Legally Separated" <?= $applicant['civilStatus'] === 'Legally Separated' ? 'selected' : '' ?>>LEGALLY SEPARATED</option>
-        <option value="Widow / Widower" <?= $applicant['civilStatus'] === 'Widow / Widower' ? 'selected' : '' ?>>WIDOW / WIDOWER</option>
-      </select>
+        <label for="birthPlace">Birthplace</label>
+        <input id="birthPlace" name="birthPlace" value="<?= htmlspecialchars($applicant['birthPlace'] ?? '') ?>" required readonly />
 
-      <label for="gender">Gender</label>
-      <select id="gender" name="gender" disabled>
-        <option value="">-- SELECT GENDER --</option>
-        <option value="Male" <?= $applicant['gender'] === 'M' ? 'selected' : '' ?>>MALE</option>
-        <option value="Female" <?= $applicant['gender'] === 'F' ? 'selected' : '' ?>>FEMALE</option>
-      </select>
+        <label for="civilStatus">Civil Status</label>
+        <select id="civilStatus" name="civilStatus" required disabled >
+          <option value="">-- SELECT CIVIL STATUS --</option>
+          <option value="Single" <?= $applicant['civilStatus'] === 'Single' ? 'selected' : '' ?>>SINGLE</option>
+          <option value="Married" <?= $applicant['civilStatus'] === 'Married' ? 'selected' : '' ?>>MARRIED</option>
+          <option value="Legally Separated" <?= $applicant['civilStatus'] === 'Legally Separated' ? 'selected' : '' ?>>LEGALLY SEPARATED</option>
+          <option value="Widow / Widower" <?= $applicant['civilStatus'] === 'Widow / Widower' ? 'selected' : '' ?>>WIDOW / WIDOWER</option>
+        </select>
 
-      <label for="nationality">Nationality</label>
-      <input id="nationality" name="nationality" value="<?= htmlspecialchars($applicant['nationality'] ?? '') ?>" readonly />
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender" required disabled >
+          <option value="">-- SELECT GENDER --</option>
+          <option value="Male" <?= $applicant['gender'] === 'M' ? 'selected' : '' ?>>MALE</option>
+          <option value="Female" <?= $applicant['gender'] === 'F' ? 'selected' : '' ?>>FEMALE</option>
+        </select>
 
-      <label for="dependentsNum">Number of Dependents</label>
-      <input id="dependentsNum" type="number" name="dependentsNum" value="<?= htmlspecialchars($applicant['dependentsNum'] ?? '') ?>"/>
+        <label for="nationality">Nationality</label>
+        <input id="nationality" name="nationality" value="<?= htmlspecialchars($applicant['nationality'] ?? '') ?>" required readonly />
 
-      <label for="educAttainment">Educational Attainment</label>
-      <select id="educAttainment" name="educAttainment" disabled>
-        <option value="">-- SELECT EDUCATIONAL ATTAINMENT --</option>
-        <option value="High School" <?= $applicant['educAttainment'] === 'High School' ? 'selected' : '' ?>>HIGH SCHOOL</option>
-        <option value="College" <?= $applicant['educAttainment'] === 'College' ? 'selected' : '' ?>>COLLEGE</option>
-        <option value="Vocational" <?= $applicant['educAttainment'] === 'Vocational' ? 'selected' : '' ?>>VOCATIONAL</option>
-        <option value="Postgraduate" <?= $applicant['educAttainment'] === 'Postgraduate' ? 'selected' : '' ?>>POSTGRADUATE</option>
-      </select>
+        <label for="dependentsNum">Number of Dependents</label>
+        <input id="dependentsNum" type="number" name="dependentsNum" value="<?= htmlspecialchars($applicant['dependentsNum'] ?? '') ?>" required />
 
-      <label for="homePNum">Home Phone Number</label>
-      <input id="homePNum" name="homePNum" value="<?= htmlspecialchars($applicant['homePNum'] ?? '') ?>" readonly/>
+        <label for="educAttainment">Educational Attainment</label>
+        <select id="educAttainment" name="educAttainment" required disabled >
+          <option value="">-- SELECT EDUCATIONAL ATTAINMENT --</option>
+          <option value="High School" <?= $applicant['educAttainment'] === 'High School' ? 'selected' : '' ?>>HIGH SCHOOL</option>
+          <option value="College" <?= $applicant['educAttainment'] === 'College' ? 'selected' : '' ?>>COLLEGE</option>
+          <option value="Vocational" <?= $applicant['educAttainment'] === 'Vocational' ? 'selected' : '' ?>>VOCATIONAL</option>
+          <option value="Postgraduate" <?= $applicant['educAttainment'] === 'Postgraduate' ? 'selected' : '' ?>>POSTGRADUATE</option>
+        </select>
 
-      <label for="mobilePNum">Mobile Phone Number</label>
-      <input id="mobilePNum" name="mobilePNum" value="<?= htmlspecialchars($applicant['mobilePNum'] ?? '') ?>" readonly/>
+        <label for="homePNum">Home Phone Number</label>
+        <input id="homePNum" name="homePNum" value="<?= htmlspecialchars($applicant['homePNum'] ?? '') ?>" readonly />
 
-      <label for="presentHomeAdrs">Present Home Address</label>
-      <textarea id="presentHomeAdrs" name="presentHomeAdrs" ><?= htmlspecialchars($applicant['presentHomeAdrs'] ?? '') ?></textarea>
+        <label for="mobilePNum">Mobile Phone Number</label>
+        <input id="mobilePNum" name="mobilePNum" value="<?= htmlspecialchars($applicant['mobilePNum'] ?? '') ?>" required readonly />
 
-      <label for="lengthOfStay">Length of Stay</label>
-      <input id="lengthOfStay" name="lengthOfStay" value="<?= htmlspecialchars($applicant['lengthOfStay'] ?? '') ?>" />
+        <label for="presentHomeAdrs">Present Home Address</label>
+        <textarea id="presentHomeAdrs" name="presentHomeAdrs" required ><?= htmlspecialchars($applicant['presentHomeAdrs'] ?? '') ?></textarea>
 
-      <label for="adrsStatus">Address Status</label>
-      <select id="adrsStatus" name="adrsStatus">
-        <option value="">-- SELECT ADDRESS STATUS --</option>
-        <option value="Owned" <?= $applicant['adrsStatus'] === 'Owned' ? 'selected' : '' ?>>OWNED</option>
-        <option value="Living with Relatives" <?= $applicant['adrsStatus'] === 'Living with Relatives' ? 'selected' : '' ?>>LIVING WITH RELATIVES</option>
-        <option value="Renting" <?= $applicant['adrsStatus'] === 'Renting' ? 'selected' : '' ?>>RENITNG</option>
-        <option value="Mortgaged" <?= $applicant['adrsStatus'] === 'Mortgaged' ? 'selected' : '' ?>>MORTGAGED</option>
-      </select>
+        <label for="lengthOfStay">Length of Stay</label>
+        <input id="lengthOfStay" name="lengthOfStay" value="<?= htmlspecialchars($applicant['lengthOfStay'] ?? '') ?>" required />
 
-      <label for="monthlyPay">Monthly Pay</label>
-      <input id="monthlyPay" name="monthlyPay" value="<?= htmlspecialchars($applicant['monthlyPay'] ?? '') ?>" 
-      <?= ($applicant['adrsStatus'] !== 'Mortgaged' && $applicant['adrsStatus'] !== 'Renting') ? 'disabled' : '' ?> />
+        <label for="adrsStatus">Address Status</label>
+        <select id="adrsStatus" name="adrsStatus" required >
+          <option value="">-- SELECT ADDRESS STATUS --</option>
+          <option value="Owned" <?= $applicant['adrsStatus'] === 'Owned' ? 'selected' : '' ?>>OWNED</option>
+          <option value="Living with Relatives" <?= $applicant['adrsStatus'] === 'Living with Relatives' ? 'selected' : '' ?>>LIVING WITH RELATIVES</option>
+          <option value="Renting" <?= $applicant['adrsStatus'] === 'Renting' ? 'selected' : '' ?>>RENTING</option>
+          <option value="Mortgaged" <?= $applicant['adrsStatus'] === 'Mortgaged' ? 'selected' : '' ?>>MORTGAGED</option>
+        </select>
 
-      <script>
-        const adrsStatus = document.getElementById('adrsStatus');
-        const monthlyPay = document.getElementById('monthlyPay');
+        <label for="monthlyPay">Monthly Pay</label>
+        <input id="monthlyPay" name="monthlyPay" value="<?= htmlspecialchars($applicant['monthlyPay'] ?? '') ?>" required
+        <?= ($applicant['adrsStatus'] !== 'Mortgaged' && $applicant['adrsStatus'] !== 'Renting') ? 'disabled' : '' ?> />
 
-        function toggleMonthlyPay() {
-            if (adrsStatus.value === 'Mortgaged') {
-                monthlyPay.disabled = false;  // enable input
-            }
-            else if (adrsStatus.value === 'Renting') {
-                monthlyPay.disabled = false;  // enable input
-            } else {
-                monthlyPay.disabled = true;   // disable input
-                monthlyPay.value = '';        // optionally clear value
-            }
-        }
+        <script>
+          const adrsStatus = document.getElementById('adrsStatus');
+          const monthlyPay = document.getElementById('monthlyPay');
 
-        // Run on page load in case the value is pre-selected
-        toggleMonthlyPay();
+          function toggleMonthlyPay() {
+              if (adrsStatus.value === 'Mortgaged') {
+                  monthlyPay.disabled = false;  // enable input
+              }
+              else if (adrsStatus.value === 'Renting') {
+                  monthlyPay.disabled = false;  // enable input
+              } else {
+                  monthlyPay.disabled = true;   // disable input
+                  monthlyPay.value = '';        // optionally clear value
+              }
+          }
 
-        // Add event listener to toggle on change
-        adrsStatus.addEventListener('change', toggleMonthlyPay);
-      </script>
-    </div>
-</div>
+          // Run on page load in case the value is pre-selected
+          toggleMonthlyPay();
+
+          // Add event listener to toggle on change
+          adrsStatus.addEventListener('change', toggleMonthlyPay);
+        </script>
+      </div>
+  </div>
         
         <!-- Employment Information -->
         <div class="form-section">
           <h2>Employment Information</h2>
           <div class="form-group">
+
             <label for="tinNumber">TIN Number</label>
-            <input id="tinNumber" name="tinNumber" value="<?= htmlspecialchars($applicant['tinNumber'] ?? '') ?>" readonly />
+            <input id="tinNumber" name="tinNumber" value="<?= htmlspecialchars($applicant['tinNumber'] ?? '') ?>" required readonly />
 
             <label for="employerName">Employer Name</label>
             <input id="employerName" name="employerName" value="<?= htmlspecialchars($applicant['employerName'] ?? '') ?>" />
@@ -223,7 +224,7 @@ while ($row = $cardResult->fetch_assoc()) {
             <input id="employerAdd" name="employerAdd" value="<?= htmlspecialchars($applicant['employerAdd'] ?? '') ?>" />
 
             <label for="typeOfEmploy">Type of Employment</label>
-            <select id="typeOfEmploy" name="typeOfEmploy" >
+            <select id="typeOfEmploy" name="typeOfEmploy" required >
               <option value="">-- SELECT --</option>
               <option value="Private" <?= $applicant['typeOfEmploy'] === 'Private' ? 'selected' : '' ?>>PRIVATE</option>
               <option value="Government" <?= $applicant['typeOfEmploy'] === 'Government' ? 'selected' : '' ?>>GOVERNMENT</option>
@@ -245,7 +246,7 @@ while ($row = $cardResult->fetch_assoc()) {
             </select>
 
             <label for="rank">Rank</label>
-            <select id="rank" name="rank">
+            <select id="rank" name="rank" required >
               <option value="">-- SELECT --</option>
               <option value="Rank & File" <?= $applicant['rank'] === 'Rank & File' ? 'selected' : '' ?>>RANK & FILE</option>
               <option value="Junior Officer" <?= $applicant['rank'] === 'Junior Officer' ? 'selected' : '' ?>>JUNIOR OFFICER</option>
@@ -297,38 +298,38 @@ while ($row = $cardResult->fetch_assoc()) {
             <input id="prevPosition" name="prevPosition" value="<?= htmlspecialchars($applicant['prevPosition'] ?? '') ?>"  />
 
             <label for="totalYrsWorking">Total Years Working</label>
-            <input id="totalYrsWorking" name="totalYrsWorking" value="<?= htmlspecialchars($applicant['totalYrsWorking'] ?? '') ?>" />
+            <input id="totalYrsWorking" name="totalYrsWorking" value="<?= htmlspecialchars($applicant['totalYrsWorking'] ?? '') ?>" required />
           </div>
         </div>
 
         <!-- Credit Card Info -->
-      <div class="form-section">
-        <h2>Credit Card Information</h2>
-        <div id="creditCardsContainer">
-          <?php foreach ($creditCards as $index => $card): ?>
-            <div class="credit-card-group">
-              <label for="cardNo_<?= $index ?>">Card Number</label>
-              <input id="cardNo_<?= $index ?>" name="cardNo[]" value="<?= htmlspecialchars($card['cardNo'] ?? '') ?>" required readonly />
+        <div class="form-section">
+          <h2>Credit Card Information</h2>
+          <div id="creditCardsContainer">
+            <?php foreach ($creditCards as $index => $card): ?>
+              <div class="credit-card-group">
+                <label for="cardNo_<?= $index ?>">Card Number</label>
+                <input id="cardNo_<?= $index ?>" name="cardNo[]" value="<?= htmlspecialchars($card['cardNo'] ?? '') ?>" required readonly />
 
-              <label for="creditCard_<?= $index ?>">Credit Card Type</label>
-              <input id="creditCard_<?= $index ?>" name="creditCard[]" value="<?= htmlspecialchars($card['creditCard'] ?? '') ?>" required readonly />
+                <label for="creditCard_<?= $index ?>">Credit Card Type</label>
+                <input id="creditCard_<?= $index ?>" name="creditCard[]" value="<?= htmlspecialchars($card['creditCard'] ?? '') ?>" required readonly />
 
-              <label for="creditLimit_<?= $index ?>">Credit Limit</label>
-              <input id="creditLimit_<?= $index ?>" name="creditLimit[]" value="<?= htmlspecialchars($card['creditLimit'] ?? '') ?>" required readonly />
+                <label for="creditLimit_<?= $index ?>">Credit Limit</label>
+                <input id="creditLimit_<?= $index ?>" name="creditLimit[]" value="<?= htmlspecialchars($card['creditLimit'] ?? '') ?>" required readonly />
 
-              <label for="expiryDate_<?= $index ?>">Expiry Date</label>
-              <input id="expiryDate_<?= $index ?>" type="date" name="expiryDate[]" value="<?= htmlspecialchars($card['expiryDate'] ?? '') ?>" required readonly />
-            </div>
-          <?php endforeach; ?>
-
-          <div style="display: flex; justify-content: space-between; gap: 12px;">
-            <button type="submit" class="form-submit-btn" onclick="window.location.href='cprofile_page.php'">Save Changes</button>
-            <button type="button" class="form-cancel-btn" onclick="window.location.href='cprofile_page.php'">Cancel</button>
+                <label for="expiryDate_<?= $index ?>">Expiry Date</label>
+                <input id="expiryDate_<?= $index ?>" type="date" name="expiryDate[]" value="<?= htmlspecialchars($card['expiryDate'] ?? '') ?>" required readonly />
+              </div>
+            <?php endforeach; ?>
           </div>
 
-          </form>
+        <div style="display: flex; justify-content: space-between; gap: 12px;">
+          <button type="submit" class="form-submit-btn" onclick="window.location.href='cprofile_page.php'">Save Changes</button>
+          <button type="button" class="form-cancel-btn" onclick="window.location.href='cprofile_page.php'">Cancel</button>
         </div>
-      </div>
+              
+          </div>
+      </form>
 
 <script src="../assets/js/ccomplete_profile_script.js"></script>
 

@@ -1,0 +1,242 @@
+/* Delete Account Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background-color: white;
+  margin: 3% auto;
+  padding: 0;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease;
+  border: 1px solid #dcdcdc;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  background-color: #153851;
+  color: white;
+  padding: 20px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header.delete-header {
+  background-color: #e74c3c;
+}
+
+.modal-header h4 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+.close {
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.close:hover {
+  opacity: 0.7;
+}
+
+.modal-body {
+  padding: 30px;
+  font-family: "Poppins", sans-serif;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* Warning Section */
+.warning-section {
+  text-align: center;
+  margin-bottom: 25px;
+  padding: 20px;
+  background: #fff5f5;
+  border: 2px solid #fed7d7;
+  border-radius: 8px;
+}
+
+.warning-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.warning-section h3 {
+  color: #e53e3e;
+  font-size: 22px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.warning-section p {
+  color: #e53e3e;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Deletion Details */
+.deletion-details {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.deletion-details p {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.deletion-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.deletion-details li {
+  padding: 8px 0;
+  color: #e74c3c;
+  font-weight: 500;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.deletion-details li:last-child {
+  border-bottom: none;
+}
+
+/* Confirmation Section */
+.confirmation-section {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.confirmation-section p {
+  font-weight: 600;
+  color: #856404;
+  margin-bottom: 15px;
+}
+
+.confirmation-section input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: border-color 0.3s ease;
+}
+
+.confirmation-section input:focus {
+  outline: none;
+  border-color: #e74c3c;
+}
+
+.confirmation-section input.valid {
+  border-color: #27ae60;
+  background-color: #d4edda;
+}
+
+.confirmation-section input.invalid {
+  border-color: #e74c3c;
+  background-color: #f8d7da;
+}
+
+.confirmation-error {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* Final Warning */
+.final-warning {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.final-warning p {
+  color: #e53e3e;
+  font-weight: 500;
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Modal Actions */
+.modal-actions {
+  padding: 20px 30px;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.modal-actions .btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  font-family: "Poppins", sans-serif;
+  min-width: 140px;
+}
+
+.btn-secondary {
+  background: #153851;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #7f8c8d;
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background: #153851;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+.btn-danger:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}

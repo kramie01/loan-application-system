@@ -21,7 +21,7 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
 <body>
 
 <?php if (isset($_SESSION['complete_profile_msg'])): ?>
-    <!-- Ultra Simple Modal -->
+    <!-- Modal -->
     <div id="modal" class="modal-overlay">
         <div class="modal-content">
             <p><?php echo $_SESSION['complete_profile_msg']; ?></p>
@@ -36,7 +36,7 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
 
   <header>
     <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
-    <h1>LendEase - Loan Application System</h1>
+    <h1>LendEase - Client Loan Application System</h1>
   </header>
 
     <div class="content">
@@ -59,19 +59,19 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
             <input id="applicantName" name="applicantName" value="<?= htmlspecialchars($_SESSION['fullname']) ?>" required readonly />
 
             <label for="motherMaidenName">Mother's Maiden Name</label>
-            <input id="motherMaidenName" name="motherMaidenName" />
+            <input id="motherMaidenName" name="motherMaidenName" required />
 
             <label for="age">Age</label>
-            <input id="age" type="number" name="age" />
+            <input id="age" type="number" name="age" required />
 
             <label for="birthDate">Birthdate</label>
-            <input id="birthDate" type="date" name="birthDate" />
+            <input id="birthDate" type="date" name="birthDate" required />
 
             <label for="birthPlace">Birthplace</label>
-            <input id="birthPlace" name="birthPlace" />
+            <input id="birthPlace" name="birthPlace" required />
 
             <label for="civilStatus">Civil Status</label>
-            <select id="civilStatus" name="civilStatus">
+            <select id="civilStatus" name="civilStatus" required >
               <option value="">-- SELECT CIVIL STATUS --</option>
               <option value="Single">SINGLE</option>
               <option value="Married">MARRIED</option>
@@ -80,20 +80,20 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
             </select>
 
             <label for="gender">Gender</label>
-            <select id="gender" name="gender">
+            <select id="gender" name="gender" required >
               <option value="">-- SELECT GENDER --</option>
               <option value="Male">MALE</option>
               <option value="Female">FEMALE</option>
             </select>
 
             <label for="nationality">Nationality</label>
-            <input id="nationality" name="nationality" />
+            <input id="nationality" name="nationality" required />
 
             <label for="dependentsNum">Number of Dependents</label>
-            <input id="dependentsNum" type="number" name="dependentsNum" />
+            <input id="dependentsNum" type="number" name="dependentsNum" required />
 
             <label for="educAttainment">Educational Attainment</label>
-            <select id="educAttainment" name="educAttainment">
+            <select id="educAttainment" name="educAttainment" required >
               <option value="">-- SELECT EDUCATIONAL ATTAINMENT --</option>
               <option value="High School">HIGH SCHOOL</option>
               <option value="College">COLLEGE</option>
@@ -105,25 +105,25 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
             <input id="homePNum" name="homePNum" />
 
             <label for="mobilePNum">Mobile Phone Number</label>
-            <input id="mobilePNum" name="mobilePNum" />
+            <input id="mobilePNum" name="mobilePNum" required />
 
             <label for="presentHomeAdrs">Present Home Address</label>
-            <textarea id="presentHomeAdrs" name="presentHomeAdrs"></textarea>
+            <textarea id="presentHomeAdrs" name="presentHomeAdrs" required ></textarea>
 
             <label for="lengthOfStay">Length of Stay</label>
-            <input id="lengthOfStay" name="lengthOfStay" />
+            <input id="lengthOfStay" name="lengthOfStay" required />
 
             <label for="adrsStatus">Address Status</label>
-            <select id="adrsStatus" name="adrsStatus">
-              <option value="">-- Select Address Status --</option>
-              <option value="Owned">Owned</option>
-              <option value="Living with Relatives">Living with Relatives</option>
-              <option value="Renting">Renting</option>
-              <option value="Mortgaged">Mortgaged</option>
+            <select id="adrsStatus" name="adrsStatus" required >
+              <option value="">-- SELECT ADDRESS STATUS --</option>
+              <option value="Owned">OWNED</option>
+              <option value="Living with Relatives">LIVING WITH RELATIVES</option>
+              <option value="Renting">RENTING</option>
+              <option value="Mortgaged">MORTGAGED</option>
             </select>
 
             <label for="monthlyPay">Monthly Pay</label>
-            <input id="monthlyPay" name="monthlyPay" />
+            <input id="monthlyPay" name="monthlyPay" required />
           </div>
         </div>
 
@@ -142,7 +142,7 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
             <input id="employerAdd" name="employerAdd" />
 
             <label for="typeOfEmploy">Type of Employment</label>
-            <select id="typeOfEmploy" name="typeOfEmploy">
+            <select id="typeOfEmploy" name="typeOfEmploy" required >
               <option value="">-- SELECT --</option>
               <option value="Private">PRIVATE</option>
               <option value="Government">GOVERNMENT</option>
@@ -160,11 +160,11 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
               <option value="Contractual">CONTRACTUAL</option>
               <option value="Professional">PROFESSIONAL</option>
               <option value="Consultant">CONSULTANT</option>
-              <option value="Special Occupation">SPECIA OCCUPATION</option>
+              <option value="Special Occupation">SPECIAL OCCUPATION</option>
             </select>
 
             <label for="rank">Rank</label>
-            <select id="rank" name="rank">
+            <select id="rank" name="rank" required >
               <option value="">-- SELECT --</option>
               <option value="Rank & File">RANK & FILE</option>
               <option value="Junior Officer">JUNIOR OFFICER</option>
@@ -216,7 +216,7 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
             <input id="prevPosition" name="prevPosition" />
 
             <label for="totalYrsWorking">Total Years Working</label>
-            <input id="totalYrsWorking" name="totalYrsWorking" />
+            <input id="totalYrsWorking" name="totalYrsWorking" required />
           </div>
         </div>
 

@@ -1,266 +1,357 @@
 <?php
 session_start();
-include '../includes/config.php';
-
-if (!isset($_SESSION['applicant_id'])) {
-    die('Error: No applicant ID found. Please login first.');
+if (!isset($_SESSION['email'])) {
+    header('Location: ../pages/home_page.php');
+    exit();
 }
 
-$applicantID = $_SESSION['applicant_id'];
+include '../includes/config.php';
+list($hostName, $port) = explode(':', $host);
+$charset = 'utf8mb4';
 
-// Fetch applicant and employment info
-$sql = "
-    SELECT a.*, e.*
-    FROM applicant_info a
-    LEFT JOIN employment_info e ON a.tinNumber = e.tinNumber
-    WHERE a.applicantID = ?
-";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $applicantID);
-$stmt->execute();
-$result = $stmt->get_result();
-$applicant = $result->fetch_assoc();
+$dsn = "mysql:host=$hostName;port=$port;dbname=$database;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+];
 
-// Fetch credit card info
+$profileData = null;
+$employmentData = null;
 $creditCards = [];
-$cardSql = "SELECT * FROM creditcard_info WHERE applicantID = ?";
-$cardStmt = $conn->prepare($cardSql);
-$cardStmt->bind_param("i", $applicantID);
-$cardStmt->execute();
-$cardResult = $cardStmt->get_result();
-while ($row = $cardResult->fetch_assoc()) {
-    $creditCards[] = $row;
+$hasProfile = false;
+
+try {
+    $pdo = new PDO($dsn, $user, $password, $options);
+    
+    $emailAdrs = $_SESSION['email'];
+    
+    // Get applicant profile
+    $stmt = $pdo->prepare("SELECT * FROM applicant_info WHERE emailAdrs = ?");
+    $stmt->execute([$emailAdrs]);
+    $profileData = $stmt->fetch();
+    
+    if ($profileData) {
+        $hasProfile = true;
+        
+        // Get employment info
+        $stmt = $pdo->prepare("SELECT * FROM employment_info WHERE tinNumber = ?");
+        $stmt->execute([$profileData['tinNumber']]);
+        $employmentData = $stmt->fetch();
+        
+        // Get credit cards
+        $stmt = $pdo->prepare("SELECT * FROM creditcard_info WHERE applicantID = ?");
+        $stmt->execute([$profileData['applicantID']]);
+        $creditCards = $stmt->fetchAll();
+    }
+    
+} catch (PDOException $e) {
+    $error = "Database error: " . $e->getMessage();
 }
 ?>
 
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Client - Profile</title>
-  <link rel="stylesheet" href="../assets/css/capply_style.css" />
- 
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Client - Profile</title>
+    <link rel="stylesheet" href="../assets/css/capply_style.css" />
+    <link rel="stylesheet" href="../assets/css/profile_view.css" />
+    <link rel="stylesheet" href="../assets/css/delete_account_modal.css" />
 </head>
+
 <body>
+    <header>
+        <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
+        <h1>Cashalo - Loan Application System</h1>
+    </header>
 
-<header>
-    <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
-    <h1>LendEase - Loan Application System</h1>
-  </header>
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <a href="../pages/cdashboard_page.php">Dashboard</a>
+            <a href="../pages/capply_loan_page.php">Apply for a Loan</a>
+            <a href="../pages/cloandetails_page.php">Loan Details</a>
+            <a href="../pages/cprofile_page.php" class="active">Profile</a>
+            <a href="../auth/logout.php">Logout</a>
+        </div>
 
-  <div class="main-container">
-    <!-- Sidebar Navigation -->
-    <div class="sidebar">
-      <a href="../pages/cdashboard_page.php">Dashboard</a>
-      <a href="../pages/capply_loan_page.php">Apply for a Loan</a>
-      <a href="../pages/cloandetails_page.php">View Loan Details</a>
-      <a href="../pages/cprofile_page.php">Profile</a>
-      <a href="../auth/logout.php">Logout</a>
+        <div class="content">
+          <h1>My Profile</h1>
+          <p>Here you can view your profile, edit it and even delete it.</p>
+          
+            <div class="profile-header">
+                <h1></h1>
+                <div class="profile-actions">
+                    <?php if ($hasProfile): ?>
+                        <a href="../pages/edit_profile_page.php" class="btn btn-secondary">Edit Profile</a>
+                        <button class="btn btn-danger" onclick="openDeleteAccountModal()">Delete Account</button>
+                    <?php else: ?>
+                        <a href="../pages/ccomplete_profile_page.php" class="btn btn-primary">Complete Profile</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="success-message"><?php echo htmlspecialchars($_SESSION['success']); ?></div>
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
+            
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="error-message"><?php echo htmlspecialchars($_SESSION['error']); ?></div>
+                <?php unset($_SESSION['error']); ?>
+            <?php endif; ?>
+
+            <?php if (isset($error)): ?>
+                <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
+            <?php elseif (!$hasProfile): ?>
+                <div class="no-profile-message">
+                    <div class="no-profile-icon">👤</div>
+                    <h3>Profile Not Completed</h3>
+                    <p>You haven't completed your profile yet. Complete your profile to apply for loans and access all features.</p>
+                    <a href="../pages/ccomplete_profile_page.php" class="btn btn-primary">Complete Profile Now</a>
+                </div>
+            <?php else: ?>
+                <!-- Personal Information -->
+                <div class="profile-section">
+                    <h3>Personal Information</h3>
+                    <div class="profile-grid">
+                        <div class="profile-item">
+                            <label>Full Name</label>
+                            <span><?php echo htmlspecialchars($profileData['applicantName']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Email Address</label>
+                            <span><?php echo htmlspecialchars($profileData['emailAdrs']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Age</label>
+                            <span><?php echo htmlspecialchars($profileData['age']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Birth Date</label>
+                            <span><?php echo date('F d, Y', strtotime($profileData['birthDate'])); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Birth Place</label>
+                            <span><?php echo htmlspecialchars($profileData['birthPlace']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Civil Status</label>
+                            <span><?php echo htmlspecialchars($profileData['civilStatus']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Gender</label>
+                            <span><?php echo htmlspecialchars($profileData['gender']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Nationality</label>
+                            <span><?php echo htmlspecialchars($profileData['nationality']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Number of Dependents</label>
+                            <span><?php echo htmlspecialchars($profileData['dependentsNum']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Educational Attainment</label>
+                            <span><?php echo htmlspecialchars($profileData['educAttainment']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Mobile Phone</label>
+                            <span><?php echo htmlspecialchars($profileData['mobilePNum']); ?></span>
+                        </div>
+                        <?php if ($profileData['homePNum']): ?>
+                        <div class="profile-item">
+                            <label>Home Phone</label>
+                            <span><?php echo htmlspecialchars($profileData['homePNum']); ?></span>
+                        </div>
+                        <?php endif; ?>
+                        <div class="profile-item full-width">
+                            <label>Present Address</label>
+                            <span><?php echo htmlspecialchars($profileData['presentHomeAdrs']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Length of Stay</label>
+                            <span><?php echo htmlspecialchars($profileData['lengthOfStay']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Address Status</label>
+                            <span><?php echo htmlspecialchars($profileData['adrsStatus']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Monthly Pay</label>
+                            <span>₱<?php echo number_format($profileData['monthlyPay'], 2); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Bank Account Number</label>
+                            <span><?php echo htmlspecialchars($profileData['bankAccountNumber']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Mother's Maiden Name</label>
+                            <span><?php echo htmlspecialchars($profileData['motherMaidenName']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>TIN Number</label>
+                            <span><?php echo htmlspecialchars($profileData['tinNumber']); ?></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Employment Information -->
+                <?php if ($employmentData): ?>
+                <div class="profile-section">
+                    <h3>Employment Information</h3>
+                    <div class="profile-grid">
+                        <div class="profile-item">
+                            <label>Employer Name</label>
+                            <span><?php echo htmlspecialchars($employmentData['employerName']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Current Position</label>
+                            <span><?php echo htmlspecialchars($employmentData['curPosition']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Employment Type</label>
+                            <span><?php echo htmlspecialchars($employmentData['typeOfEmploy']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Employment Status</label>
+                            <span><?php echo htmlspecialchars($employmentData['employStatus']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Rank</label>
+                            <span><?php echo htmlspecialchars($employmentData['rank']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>SSS Number</label>
+                            <span><?php echo htmlspecialchars($employmentData['sssNum']); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Date of Hire</label>
+                            <span><?php echo date('F d, Y', strtotime($employmentData['dateOfHire'])); ?></span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Current Length of Service</label>
+                            <span><?php echo htmlspecialchars($employmentData['curLengthService']); ?> year/s</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Total Years Working</label>
+                            <span><?php echo htmlspecialchars($employmentData['totalYrsWorking']); ?> year/s</span>
+                        </div>
+                        <div class="profile-item full-width">
+                            <label>Employer Address</label>
+                            <span><?php echo htmlspecialchars($employmentData['employerAdd']); ?></span>
+                        </div>
+                        <?php if ($employmentData['officeNum']): ?>
+                        <div class="profile-item">
+                            <label>Office Number</label>
+                            <span><?php echo htmlspecialchars($employmentData['officeNum']); ?></span>
+                        </div>
+                        <?php endif; ?>
+                        <?php if ($employmentData['officeEmailAdd']): ?>
+                        <div class="profile-item">
+                            <label>Office Email</label>
+                            <span><?php echo htmlspecialchars($employmentData['officeEmailAdd']); ?></span>
+                        </div>
+                        <?php endif; ?>
+                        <?php if ($employmentData['hrContactPerson']): ?>
+                        <div class="profile-item">
+                            <label>HR Contact Person</label>
+                            <span><?php echo htmlspecialchars($employmentData['hrContactPerson']); ?></span>
+                        </div>
+                        <?php endif; ?>
+                        <?php if ($employmentData['officeTelNum']): ?>
+                        <div class="profile-item">
+                            <label>Office Telephone</label>
+                            <span><?php echo htmlspecialchars($employmentData['officeTelNum']); ?></span>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <!-- Credit Card Information -->
+                <?php if (!empty($creditCards)): ?>
+                <div class="profile-section">
+                    <h3>Credit Card Information</h3>
+                    <div class="credit-cards-container">
+                        <?php foreach ($creditCards as $index => $card): ?>
+                        <div class="credit-card-item">
+                            <h4>Credit Card <?php echo $index + 1; ?></h4>
+                            <div class="profile-grid">
+                                <div class="profile-item">
+                                    <label>Card Number</label>
+                                    <span>****-****-****-<?php echo substr($card['cardNo'], -4); ?></span>
+                                </div>
+                                <div class="profile-item">
+                                    <label>Card Type</label>
+                                    <span><?php echo htmlspecialchars($card['creditCard']); ?></span>
+                                </div>
+                                <div class="profile-item">
+                                    <label>Credit Limit</label>
+                                    <span>₱<?php echo number_format($card['creditLimit'], 2); ?></span>
+                                </div>
+                                <div class="profile-item">
+                                    <label>Expiry Date</label>
+                                    <span><?php echo date('m/Y', strtotime($card['expiryDate'])); ?></span>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
     </div>
 
-  <div class="content">
-      <h1>Client Profile</h1>
-      <p>Here is your profile</p>
-
-        <!-- Applicant Information -->
-        <div class="form-section">
-          <h2>Applicant Information</h2>
-          <div class="form-group">
-            <label for="bankAccountNumber">Bank Account Number</label>
-      <input id="bankAccountNumber" name="bankAccountNumber" value="<?= htmlspecialchars($applicant['bankAccountNumber'] ?? '') ?>" readonly />
-
-      <label for="emailAdrs">Email Address</label>
-      <input id="emailAdrs" name="emailAdrs" type="email" value="<?= htmlspecialchars($applicant['emailAdrs'] ?? '') ?>" readonly />
-
-      <label for="applicantName">Full Name</label>
-      <input id="applicantName" name="applicantName" value="<?= htmlspecialchars($applicant['applicantName'] ?? '') ?>" readonly />
-
-      <label for="motherMaidenName">Mother's Maiden Name</label>
-      <input id="motherMaidenName" name="motherMaidenName" value="<?= htmlspecialchars($applicant['motherMaidenName'] ?? '') ?>" readonly />
-
-      <label for="age">Age</label>
-      <input id="age" type="number" name="age" value="<?= htmlspecialchars($applicant['age'] ?? '') ?>" readonly />
-
-      <label for="birthDate">Birthdate</label>
-      <input id="birthDate" type="date" name="birthDate" value="<?= htmlspecialchars($applicant['birthDate'] ?? '') ?>" readonly />
-
-      <label for="birthPlace">Birthplace</label>
-      <input id="birthPlace" name="birthPlace" value="<?= htmlspecialchars($applicant['birthPlace'] ?? '') ?>" readonly />
-
-      <label for="civilStatus">Civil Status</label>
-      <select id="civilStatus" name="civilStatus" disabled>
-        <option value="">-- SELECT CIVIL STATUS --</option>
-        <option value="Single" <?= $applicant['civilStatus'] === 'Single' ? 'selected' : '' ?>>SINGLE</option>
-        <option value="Married" <?= $applicant['civilStatus'] === 'Married' ? 'selected' : '' ?>>MARRIED</option>
-        <option value="Legally Separated" <?= $applicant['civilStatus'] === 'Legally Separated' ? 'selected' : '' ?>>LEGALLY SEPARATED</option>
-        <option value="Widow / Widower" <?= $applicant['civilStatus'] === 'Widow / Widower' ? 'selected' : '' ?>>WIDOW / WIDOWER</option>
-      </select>
-
-      <label for="gender">Gender</label>
-      <select id="gender" name="gender" disabled>
-        <option value="">-- SELECT GENDER --</option>
-        <option value="Male" <?= $applicant['gender'] === 'M' ? 'selected' : '' ?>>MALE</option>
-        <option value="Female" <?= $applicant['gender'] === 'F' ? 'selected' : '' ?>>FEMALE</option>
-      </select>
-
-      <label for="nationality">Nationality</label>
-      <input id="nationality" name="nationality" value="<?= htmlspecialchars($applicant['nationality'] ?? '') ?>" readonly />
-
-      <label for="dependentsNum">Number of Dependents</label>
-      <input id="dependentsNum" type="number" name="dependentsNum" value="<?= htmlspecialchars($applicant['dependentsNum'] ?? '') ?>" readonly />
-
-      <label for="educAttainment">Educational Attainment</label>
-      <select id="educAttainment" name="educAttainment" disabled>
-        <option value="">-- SELECT EDUCATIONAL ATTAINMENT --</option>
-        <option value="High School" <?= $applicant['educAttainment'] === 'High School' ? 'selected' : '' ?>>HIGH SCHOOL</option>
-        <option value="College" <?= $applicant['educAttainment'] === 'College' ? 'selected' : '' ?>>COLLEGE</option>
-        <option value="Vocational" <?= $applicant['educAttainment'] === 'Vocational' ? 'selected' : '' ?>>VOCATIONAL</option>
-        <option value="Postgraduate" <?= $applicant['educAttainment'] === 'Postgraduate' ? 'selected' : '' ?>>POSTGRADUATE</option>
-      </select>
-
-      <label for="homePNum">Home Phone Number</label>
-      <input id="homePNum" name="homePNum" value="<?= htmlspecialchars($applicant['homePNum'] ?? '') ?>" readonly />
-
-      <label for="mobilePNum">Mobile Phone Number</label>
-      <input id="mobilePNum" name="mobilePNum" value="<?= htmlspecialchars($applicant['mobilePNum'] ?? '') ?>" readonly />
-
-      <label for="presentHomeAdrs">Present Home Address</label>
-      <textarea id="presentHomeAdrs" name="presentHomeAdrs" readonly><?= htmlspecialchars($applicant['presentHomeAdrs'] ?? '') ?></textarea>
-
-      <label for="lengthOfStay">Length of Stay</label>
-      <input id="lengthOfStay" name="lengthOfStay" value="<?= htmlspecialchars($applicant['lengthOfStay'] ?? '') ?>" readonly />
-
-      <label for="adrsStatus">Address Status</label>
-      <select id="adrsStatus" name="adrsStatus" disabled>
-        <option value="">-- SELECT ADDRESS STATUS --</option>
-        <option value="Owned" <?= $applicant['adrsStatus'] === 'Owned' ? 'selected' : '' ?>>OWNED</option>
-        <option value="Living with Relatives" <?= $applicant['adrsStatus'] === 'Living with Relatives' ? 'selected' : '' ?>>LIVING WITH RELATIVES</option>
-        <option value="Renting" <?= $applicant['adrsStatus'] === 'Renting' ? 'selected' : '' ?>>RENTING</option>
-        <option value="Mortgaged" <?= $applicant['adrsStatus'] === 'Mortgaged' ? 'selected' : '' ?>>MORTAGED</option>
-      </select>
-
-      <label for="monthlyPay">Monthly Pay</label>
-      <input id="monthlyPay" name="monthlyPay" value="<?= htmlspecialchars($applicant['monthlyPay'] ?? '') ?>" readonly />
-          </div>
-        </div>
-
-        <!-- Employment Information -->
-        <div class="form-section">
-          <h2>Employment Information</h2>
-          <div class="form-group">
-            <label for="tinNumber">TIN Number</label>
-            <input id="tinNumber" name="tinNumber" value="<?= htmlspecialchars($applicant['tinNumber'] ?? '') ?>" readonly />
-
-            <label for="employerName">Employer Name</label>
-            <input id="employerName" name="employerName" value="<?= htmlspecialchars($applicant['employerName'] ?? '') ?>" readonly />
-
-            <label for="employerAdd">Employer Address</label>
-            <input id="employerAdd" name="employerAdd" value="<?= htmlspecialchars($applicant['employerAdd'] ?? '') ?>" readonly />
-
-            <label for="typeOfEmploy">Type of Employment</label>
-            <select id="typeOfEmploy" name="typeOfEmploy" disabled>
-              <option value="">-- SELECT --</option>
-              <option value="Private" <?= $applicant['typeOfEmploy'] === 'Private' ? 'selected' : '' ?>>PRIVATE</option>
-              <option value="Government" <?= $applicant['typeOfEmploy'] === 'Government' ? 'selected' : '' ?>>GOVERNMENT</option>
-              <option value="Professional" <?= $applicant['typeOfEmploy'] === 'Professional' ? 'selected' : '' ?>>PROFESSIONAL</option>
-              <option value="Self-Employed" <?= $applicant['typeOfEmploy'] === 'Self-Employed' ? 'selected' : '' ?>>SELF-EMPLOYED</option>
-              <option value="Unemployed" <?= $applicant['typeOfEmploy'] === 'Unemployed' ? 'selected' : '' ?>>UNEMPLOYED</option>
-              <option value="Retired" <?= $applicant['typeOfEmploy'] === 'Retired' ? 'selected' : '' ?>>RETIRED</option>
-            </select>
-
-            <label for="employStatus">Employment Status</label>
-            <select id="employStatus" name="employStatus" disabled>
-              <option value="">-- SELECT --</option>
-              <option value="Permanent" <?= $applicant['employStatus'] === 'Permanent' ? 'selected' : '' ?>>PERMANENT</option>
-              <option value="Probationary" <?= $applicant['employStatus'] === 'Probationary' ? 'selected' : '' ?>>PROBATIONARY</option>
-              <option value="Contractual" <?= $applicant['employStatus'] === 'Contractual' ? 'selected' : '' ?>>CONTRACTUAL</option>
-              <option value="Professional" <?= $applicant['employStatus'] === 'Professional' ? 'selected' : '' ?>>PROFESSIONAL</option>
-              <option value="Consultant" <?= $applicant['employStatus'] === 'Consultant' ? 'selected' : '' ?>>CONSULTANT</option>
-              <option value="Special Occupation" <?= $applicant['employStatus'] === 'Special Occupation' ? 'selected' : '' ?>>SPECIAL OCCUPATION</option>
-            </select>
-
-            <label for="rank">Rank</label>
-            <select id="rank" name="rank" disabled>
-              <option value="">-- SELECT --</option>
-              <option value="Rank & File" <?= $applicant['rank'] === 'Rank & File' ? 'selected' : '' ?>>RANK & FILE</option>
-              <option value="Junior Officer" <?= $applicant['rank'] === 'Junior Officer' ? 'selected' : '' ?>>JUNIOR OFFICER</option>
-              <option value="Middle Manager" <?= $applicant['rank'] === 'Middle Manager' ? 'selected' : '' ?>>MIDDLE MANAGER</option>
-              <option value="Senior Executive" <?= $applicant['rank'] === 'Senior Executive' ? 'selected' : '' ?>>SENIOR EXECUTIVE</option>
-              <option value="Self-Employed" <?= $applicant['rank'] === 'Self-Employed' ? 'selected' : '' ?>>SELF-EMPLOYED</option>
-              <option value="Others" <?= $applicant['rank'] === 'Others' ? 'selected' : '' ?>>OTHERS</option>
-            </select>
-
-            <div id="otherRankContainer" style="<?= ($applicant['rank'] ?? '') === 'Others' ? 'display: block;' : 'display: none;' ?>; margin-top: 10px;">
-              <label for="otherRank">Please specify</label>
-              <input type="text" id="otherRank" name="otherRank" value="<?= htmlspecialchars($applicant['otherRank'] ?? '') ?>" readonly />
+    <!-- Delete Account Confirmation Modal -->
+    <div id="deleteAccountModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header delete-header">
+                <h4>⚠️ Delete Account</h4>
+                <span class="close" onclick="closeDeleteAccountModal()">&times;</span>
             </div>
+            <div class="modal-body">
+                <div class="warning-section">
+                    <div class="warning-icon">🚨</div>
+                    <h3>Are you absolutely sure?</h3>
+                    <p><strong>This action cannot be undone!</strong></p>
+                </div>
+                
+                <div class="deletion-details">
+                    <p>Deleting your account will permanently remove:</p>
+                    <ul>
+                        <li>X Your personal profile information</li>
+                        <li>X Employment details and history</li>
+                        <li>X Credit card information</li>
+                        <li>X All loan applications and history</li>
+                        <li>X Your user account and login credentials</li>
+                    </ul>
+                </div>
 
-            <label for="curPosition">Current Position</label>
-            <input id="curPosition" name="curPosition" value="<?= htmlspecialchars($applicant['curPosition'] ?? '') ?>" readonly />
+                <div class="confirmation-section">
+                    <p><strong>To confirm deletion, please type "DELETE" in the box below:</strong></p>
+                    <input type="text" id="deleteConfirmation" placeholder="Type DELETE to confirm" maxlength="6">
+                    <div id="confirmationError" class="confirmation-error" style="display: none;">
+                        Please type "DELETE" exactly as shown to confirm.
+                    </div>
+                </div>
 
-            <label for="sssNum">SSS Number</label>
-            <input id="sssNum" name="sssNum" value="<?= htmlspecialchars($applicant['sssNum'] ?? '') ?>" readonly />
-
-            <label for="dateOfHire">Date of Hire</label>
-            <input id="dateOfHire" type="date" name="dateOfHire" value="<?= htmlspecialchars($applicant['dateOfHire'] ?? '') ?>" readonly />
-
-            <label for="curLengthService">Current Length of Service</label>
-            <input id="curLengthService" name="curLengthService" value="<?= htmlspecialchars($applicant['curLengthService'] ?? '') ?>" readonly />
-
-            <label for="officeNum">Office Number</label>
-            <input id="officeNum" name="officeNum" value="<?= htmlspecialchars($applicant['officeNum'] ?? '') ?>" readonly />
-
-            <label for="officeEmailAdd">Office Email Address</label>
-            <input id="officeEmailAdd" type="email" name="officeEmailAdd" value="<?= htmlspecialchars($applicant['officeEmailAdd'] ?? '') ?>" readonly />
-
-            <label for="hrContactPerson">HR Contact Person</label>
-            <input id="hrContactPerson" name="hrContactPerson" value="<?= htmlspecialchars($applicant['hrContactPerson'] ?? '') ?>" readonly />
-
-            <label for="officeTelNum">Office Telephone Number</label>
-            <input id="officeTelNum" name="officeTelNum" value="<?= htmlspecialchars($applicant['officeTelNum'] ?? '') ?>" readonly />
-
-            <label for="dayToCall">Best Day to Call</label>
-            <input id="dayToCall" name="dayToCall" value="<?= htmlspecialchars($applicant['dayToCall'] ?? '') ?>" readonly />
-
-            <label for="prevEmployer">Previous Employer</label>
-            <input id="prevEmployer" name="prevEmployer" value="<?= htmlspecialchars($applicant['prevEmployer'] ?? '') ?>" readonly />
-
-            <label for="prevLengthService">Previous Length of Service</label>
-            <input id="prevLengthService" name="prevLengthService" value="<?= htmlspecialchars($applicant['prevLengthService'] ?? '') ?>" readonly />
-
-            <label for="prevPosition">Previous Position</label>
-            <input id="prevPosition" name="prevPosition" value="<?= htmlspecialchars($applicant['prevPosition'] ?? '') ?>" readonly />
-
-            <label for="totalYrsWorking">Total Years Working</label>
-            <input id="totalYrsWorking" name="totalYrsWorking" value="<?= htmlspecialchars($applicant['totalYrsWorking'] ?? '') ?>" readonly />
-          </div>
-        </div>
-
-        <!-- Credit Card Info -->
-      <div class="form-section">
-        <h2>Credit Card Information</h2>
-        <div id="creditCardsContainer">
-          <?php foreach ($creditCards as $index => $card): ?>
-            <div class="credit-card-group">
-              <label for="cardNo_<?= $index ?>">Card Number</label>
-              <input id="cardNo_<?= $index ?>" name="cardNo[]" value="<?= htmlspecialchars($card['cardNo'] ?? '') ?>" required readonly />
-
-              <label for="creditCard_<?= $index ?>">Credit Card Type</label>
-              <input id="creditCard_<?= $index ?>" name="creditCard[]" value="<?= htmlspecialchars($card['creditCard'] ?? '') ?>" required readonly />
-
-              <label for="creditLimit_<?= $index ?>">Credit Limit</label>
-              <input id="creditLimit_<?= $index ?>" name="creditLimit[]" value="<?= htmlspecialchars($card['creditLimit'] ?? '') ?>" required readonly />
-
-              <label for="expiryDate_<?= $index ?>">Expiry Date</label>
-              <input id="expiryDate_<?= $index ?>" type="date" name="expiryDate[]" value="<?= htmlspecialchars($card['expiryDate'] ?? '') ?>" required readonly />
+                <div class="final-warning">
+                    <p><strong>⚠️ Warning:</strong> Once deleted, you will need to create a <br> new account and complete your profile again <br> if you want to use our services in the future.</p>
+                </div>
             </div>
-          <?php endforeach; ?>
+            <form id="deleteAccountForm" method="POST" action="../auth/delete_account.php">
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeDeleteAccountModal()">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="confirmDeleteBtn" disabled>Delete My Account</button>
+                </div>
+            </form>
         </div>
-      </div>
+    </div>
 
-    <a href="edit_profile_page.php">
-      <button type="submit" class="form-submit-btn">Update Profile</button>
-    </a>
-
+    <script src="../assets/js/profile_view.js"></script>
+    <script src="../assets/js/delete_account.js"></script>
 </body>
 </html>

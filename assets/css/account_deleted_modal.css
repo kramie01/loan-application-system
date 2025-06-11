@@ -1,0 +1,187 @@
+/* Account Deleted Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 110%;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.3s ease;
+  margin-top: -35px;;
+}
+
+.modal-content {
+  background-color: white;
+  margin: 5% auto;
+  padding: 0;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease;
+  border: 1px solid #dcdcdc;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  background-color: #153851;
+  color: white;
+  padding: 20px;
+  border-radius: 12px 12px 0 0;
+  text-align: center;
+}
+
+.modal-header.success-header {
+  background-color: #27ae60;
+}
+
+.modal-header h4 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+.modal-body {
+  padding: 30px;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  color: #444;
+  line-height: 1.6;
+}
+
+.success-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.modal-body h3 {
+  color: #27ae60;
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.deletion-summary {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.deletion-summary p {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.deletion-summary ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.deletion-summary li {
+  padding: 8px 0;
+  color: #27ae60;
+  font-weight: 500;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.deletion-summary li:last-child {
+  border-bottom: none;
+}
+
+.farewell-message {
+  background-color: #e8f5e8;
+  border: 1px solid #c3e6cb;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.farewell-message p {
+  margin-bottom: 10px;
+  color: #155724;
+}
+
+.farewell-message p:last-child {
+  margin-bottom: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.modal-actions {
+  padding: 20px 30px;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  font-family: "Poppins", sans-serif;
+  min-width: 180px;
+}
+
+.btn-primary {
+  background: #153851;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0870ba;
+  transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 10% auto;
+  }
+
+  .modal-body {
+    padding: 20px;
+  }
+
+  .deletion-summary,
+  .farewell-message {
+    padding: 15px;
+  }
+}

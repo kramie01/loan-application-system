@@ -63,3 +63,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const allInputs = document.querySelectorAll('input, textarea');
   allInputs.forEach(convertToUppercase);
 })
+
+function closeAccountDeletedModal() {
+  const modal = document.getElementById("accountDeletedModal")
+  if (modal) {
+    modal.style.display = "none"
+
+    // Remove the deleted parameter from URL
+    const url = new URL(window.location)
+    url.searchParams.delete("deleted")
+    window.history.replaceState({}, document.title, url.pathname)
+  }
+}
+
+
+// Close modal when clicking outside
+window.onclick = (event) => {
+  const modal = document.getElementById("accountDeletedModal")
+  if (modal && event.target === modal) {
+    closeAccountDeletedModal()
+  }
+}

@@ -21,6 +21,10 @@ function showMessage($message, $type = 'error') {
 function isActiveForm($formId, $activeForm) {
     return $formId === $activeForm ? 'active' : '';
 }
+
+// Check if account was deleted
+$accountDeleted = isset($_GET['deleted']) && $_GET['deleted'] === 'true';
+
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +34,8 @@ function isActiveForm($formId, $activeForm) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LendEase - Home Login</title>
     <link rel="stylesheet" href="../assets/css/home_style.css">
+    <link rel="stylesheet" href="../assets/css/account_deleted_modal.css" />
+
 </head>
 <body data-login-role="<?= htmlspecialchars($loginRole ?? '') ?>">
     <div class="container">
@@ -87,6 +93,38 @@ function isActiveForm($formId, $activeForm) {
             </div>
         </div>
     </div>
+
+        <!-- Account Deleted Success Modal -->
+    <?php if ($accountDeleted): ?>
+    <div id="accountDeletedModal" class="modal" style="display: block;">
+        <div class="modal-content">
+            <div class="modal-header success-header">
+                <h4>✅ Account Successfully Deleted</h4>
+            </div>
+            <div class="modal-body">
+                <div class="success-icon">🗑️</div>
+                <h3>Your account has been permanently deleted</h3>
+                <div class="deletion-summary">
+                    <p>All your information has been successfully removed from our system:</p>
+                    <ul>
+                        <li>✓ Personal profile information</li>
+                        <li>✓ Employment details</li>
+                        <li>✓ Credit card information</li>
+                        <li>✓ Loan applications and history</li>
+                        <li>✓ User account and login credentials</li>
+                    </ul>
+                </div>
+                <div class="farewell-message">
+                    <p><strong>Thank you for using LendEase.</strong></p>
+                    <p>If you decide to use our services again in the future, you'll need to create a new account and complete your profile.</p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-primary" onclick="closeAccountDeletedModal()">Continue to Homepage</button>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <script src="../assets/js/home_script.js"></script>
 </body>

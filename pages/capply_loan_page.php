@@ -58,7 +58,7 @@ try {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Client - Loan Application</title>
+    <title>Client - Apply Loan Application</title>
     <link rel="stylesheet" href="../assets/css/capply_style.css" />
     <link rel="stylesheet" href="../assets/css/loan_modal.css" />
 </head>
@@ -66,15 +66,15 @@ try {
 <body>
     <header>
         <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
-        <h1>LendEase - Loan Application System</h1>
+        <h1>LendEase - Client Loan Application System</h1>
     </header>
 
     <div class="main-container">
         <!-- Sidebar Navigation -->
         <div class="sidebar">
           <a href="../pages/cdashboard_page.php">Dashboard</a>
-          <a href="../pages/capply_loan_page.php">Apply for a Loan</a>
-          <a href="../pages/cloandetails_page.php">View Loan Details</a>
+          <a href="../pages/capply_loan_page.php" class="active">Apply for a Loan</a>
+          <a href="../pages/cloandetails_page.php">Loan Details</a>
           <a href="../pages/cprofile_page.php">Profile</a>
           <a href="../auth/logout.php">Logout</a>
         </div>
@@ -99,10 +99,10 @@ try {
                     <h2>Loan Details</h2>
                     <div class="form-group">
                         <label for="loanAmount">Loan Amount (₱)</label>
-                        <input type="number" id="loanAmount" name="loanAmount" />
+                        <input type="number" id="loanAmount" name="loanAmount" required />
 
                         <label for="paymentTerm">Payment Term (months)</label>
-                        <select id="paymentTerm" name="paymentTerm" >
+                        <select id="paymentTerm" name="paymentTerm" required >
                             <option value="">-- Select Term --</option>
                             <option value="6">6 months</option>
                             <option value="12">12 months</option>
@@ -112,7 +112,7 @@ try {
                         </select>
 
                         <label for="loanPurpose">Loan Purpose</label>
-                        <select id="loanPurpose" name="loanPurpose" >
+                        <select id="loanPurpose" name="loanPurpose" required >
                             <option value="">-- Select Purpose --</option>
                             <option value="Travel">Travel</option>
                             <option value="Appliance/s">Appliance/s</option>
@@ -149,7 +149,7 @@ try {
             </div>
             <div class="modal-body">
                 <div class="warning-icon">⚠️</div>
-                <p>You already have an active loan application. You can only have one loan at a time.</p>
+                <p>You already have an active loan application. <br> You can only have one loan at a time.</p>
                 
                 <?php if ($hasExistingLoan && $existingLoanDetails): ?>
                 <div class="existing-loan-details">

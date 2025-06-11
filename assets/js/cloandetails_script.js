@@ -101,13 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const purpose = document.getElementById("updateLoanPurpose").value
       const otherPurpose = document.getElementById("updateOtherPurpose").value
 
-      // Validate loan amount
-      if (amount < 1000 || amount > 500000) {
-        alert("Loan amount must be between ₱1,000 and ₱500,000")
-        e.preventDefault()
-        return
-      }
-
       // Validate other purpose if selected
       if (purpose === "Others" && otherPurpose.trim() === "") {
         alert("Please specify the loan purpose")
@@ -127,14 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
-
-// Utility function to format currency
-function formatCurrency(amount) {
-  return new Intl.NumberFormat("en-PH", {
-    style: "currency",
-    currency: "PHP",
-  }).format(amount)
-}
 
 // Function to show success/error messages
 function showMessage(message, type = "info") {

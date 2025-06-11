@@ -20,15 +20,15 @@ if (!isset($_SESSION['email'])) {
 <body>
   <header>
     <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
-    <h1>LendEase - Loan Application System</h1>
+    <h1>LendEase - Client Loan Application System</h1>
   </header>
 
   <div class="main-container">
     <!-- Sidebar Navigation -->
     <div class="sidebar">
-      <a href="../pages/cdashboard_page.php">Dashboard</a>
+      <a href="../pages/cdashboard_page.php" class="active">Dashboard</a>
       <a href="../pages/capply_loan_page.php">Apply for a Loan</a>
-      <a href="../pages/cloandetails_page.php">View Loan Details</a>
+      <a href="../pages/cloandetails_page.php">Loan Details</a>
       <a href="../pages/cprofile_page.php">Profile</a>
       <a href="../auth/logout.php">Logout</a>
     </div>

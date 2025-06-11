@@ -1,0 +1,202 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+.content h1 {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  color: #153851;
+}
+
+.content h1 span {
+  color: #0d2739;
+}
+
+.content p {
+  font-size: 17px;
+  color: #444;
+}
+
+/* Profile View Styles */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.profile-header h1 {
+  color: #153851;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.profile-actions .btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-family: "Poppins", sans-serif;
+}
+
+.btn-primary {
+  background: #153851;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0870ba;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: #153851;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #7f8c8d;
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background: #153851;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+/* Profile Sections */
+.profile-section {
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  padding: 25px 30px;
+}
+
+.profile-section h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #2a2a2a;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+  font-weight: 700;
+}
+
+/* Profile Grid */
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.profile-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.profile-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.profile-item label {
+  font-weight: 700;
+  color: #153851;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.profile-item span {
+  color: #444;
+  font-size: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Credit Cards */
+.credit-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.credit-card-item {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.credit-card-item h4 {
+  color: #153851;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/* No Profile Message */
+.no-profile-message {
+  text-align: center;
+  padding: 60px 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #dcdcdc;
+}
+
+.no-profile-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+.no-profile-message h3 {
+  color: #153851;
+  font-size: 24px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.no-profile-message p {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+/* Success and Error Messages */
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #c3e6cb;
+  margin-bottom: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #f5c6cb;
+  margin-bottom: 20px;
+  font-family: "Poppins", sans-serif;
+}
