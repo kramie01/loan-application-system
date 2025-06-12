@@ -97,8 +97,8 @@ while ($row = $cardResult->fetch_assoc()) {
     </div>
 
   <div class="content">
-      <h1>Update Profile</h1>
-      <p>Edit your profile</p>
+      <h1>UPDATE MY PROFILE</h1>
+      <p>You can edit your profile and save it.</p>
 
       <form id="updateLoanForm" method="POST" action="../auth/update_profile.php"> 
         <!-- Applicant Information -->

@@ -71,8 +71,8 @@ try {
 
         <div class="content">
 
-            <h1>Pending Loan Applications</h1>
-            <p>Review and approve pending loan applications</p>
+            <h1>PENDING LOAN APPLICATIONS</h1>
+            <p>Review and approve pending loan applications.</p>
 
             <section class="loan-details-section">
             <h3>Pending Loans</h3>

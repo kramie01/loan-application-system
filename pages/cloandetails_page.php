@@ -68,7 +68,7 @@ try {
         </div>
 
         <div class="content">
-            <h1>Loan Details</h1>
+            <h1>LOAN DETAILS</h1>
             <p>Here is your loan details, you can edit, update and cancel your application.</p>
 
             <section class="loan-details-section">

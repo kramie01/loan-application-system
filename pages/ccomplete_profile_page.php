@@ -40,7 +40,7 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
   </header>
 
     <div class="content">
-      <h1>Complete Your Profile</h1>
+      <h1>COMPLETE YOUR PROFILE</h1>
       <p>Complete the form below for your profile.</p>
 
       <form action="../auth/submit_profile.php" method="POST">

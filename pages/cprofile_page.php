@@ -77,7 +77,7 @@ try {
         </div>
 
         <div class="content">
-          <h1>My Profile</h1>
+          <h1>MY PROFILE</h1>
           <p>Here you can view your profile, edit it and even delete it.</p>
           
             <div class="profile-header">

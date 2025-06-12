@@ -81,8 +81,8 @@ function getStatValue($stats, $key) {
 
         <div class="content">
 
-        <h1>Welcome, <span><?= htmlspecialchars($_SESSION['username']) ?>!</span></h1>
-        <p>Here is the admin page, you can manage loan application</p>
+        <h1>WELCOME, <span><?= htmlspecialchars($_SESSION['username']) ?>!</span></h1>
+        <p>Here is the admin page, you can manage all loan applications.</p>
 
             <section class="loan-details-section">
                 <h3>Admin Dashboard</h3>

@@ -71,8 +71,8 @@ try {
 
         <div class="content">
 
-            <h1>Paid Loan Applications</h1>
-            <p>View paid loan applications</p>
+            <h1>PAID LOAN APPLICATIONS</h1>
+            <p>View paid loan applications.</p>
 
             <section class="loan-details-section">
                 <h3>Paid Loans</h3>

@@ -35,8 +35,8 @@ if (!isset($_SESSION['email'])) {
 
     <!-- Dashboard Content -->
     <div class="content">
-      <h1>Welcome, <span><?= htmlspecialchars($_SESSION['username']) ?>!</span></h1>
-      <p>Here is our background about loan system</p>
+      <h1>WELCOME, <span><?= htmlspecialchars($_SESSION['username']) ?>!</span></h1>
+      <p>Here is the background about our loan application system.</p>
 
       <img src="../assets/images/lendease_black.png" alt="LendEase Logo" class="logo" />
 

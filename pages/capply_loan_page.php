@@ -80,7 +80,7 @@ try {
         </div>
 
         <div class="content">
-            <h1>Apply for a Loan</h1>
+            <h1>APPLY FOR A LOAN</h1>
             <p>Complete the form below to apply for a loan.</p>
 
             <?php if (isset($_SESSION['success'])): ?>
