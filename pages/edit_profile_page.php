@@ -243,6 +243,8 @@ while ($row = $cardResult->fetch_assoc()) {
               <option value="Professional" <?= $applicant['employStatus'] === 'Professional' ? 'selected' : '' ?>>PROFESSIONAL</option>
               <option value="Consultant" <?= $applicant['employStatus'] === 'Consultant' ? 'selected' : '' ?>>CONSULTANT</option>
               <option value="Special Occupation" <?= $applicant['employStatus'] === 'Special Occupation' ? 'selected' : '' ?>>SPECIAL OCCUPATION</option>
+              <option value="Unemployed" <?= $applicant['employStatus'] === 'Unemployed' ? 'selected' : '' ?>>UNEMPLOYED</option>
+
             </select>
 
             <label for="rank">Rank</label>

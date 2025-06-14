@@ -161,6 +161,7 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
               <option value="Professional">PROFESSIONAL</option>
               <option value="Consultant">CONSULTANT</option>
               <option value="Special Occupation">SPECIAL OCCUPATION</option>
+              <option value="Unemployed">UNEMPLOYED</option>
             </select>
 
             <label for="rank">Rank</label>
