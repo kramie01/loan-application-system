@@ -62,10 +62,58 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
             <input id="motherMaidenName" name="motherMaidenName" required />
 
             <label for="age">Age</label>
-            <input id="age" type="number" name="age" required />
+            <input id="age" type="number" name="age" required readonly />
 
             <label for="birthDate">Birthdate</label>
             <input id="birthDate" type="date" name="birthDate" required />
+
+            <script>
+              const ageInput = document.getElementById('age');
+              const birthDateInput = document.getElementById('birthDate');
+
+              function calculateAge(birthDate) {
+                  const today = new Date();
+                  const birth = new Date(birthDate);
+                  let age = today.getFullYear() - birth.getFullYear();
+                  const monthDiff = today.getMonth() - birth.getMonth();
+                  
+                  // If birthday hasn't occurred this year yet, subtract 1
+                  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                      age--;
+                  }
+                  
+                  return age;
+              }
+
+              function updateAge() {
+                  const birthDate = birthDateInput.value;
+                  
+                  if (birthDate) {
+                      const age = calculateAge(birthDate);
+                      ageInput.value = age;
+                      
+                      console.log('Calculated age:', age); // Debug line
+                      
+                      // Check if age is below 18 - show alert only
+                      if (age < 18) {
+                          alert('Enter your correct birthdate and ensure you are at least 18 years old.');
+                          birthDateInput.value = ''; // Clear the invalid date
+                          ageInput.value = ''; // Clear the age
+                      }
+                  } else {
+                      // Clear age if no birthdate is selected
+                      ageInput.value = '';
+                  }
+              }
+
+              // Add event listener to birthdate input
+              birthDateInput.addEventListener('change', updateAge);
+
+              // Run on page load if birthdate is already set
+              if (birthDateInput.value) {
+                  updateAge();
+              }
+            </script>
 
             <label for="birthPlace">Birthplace</label>
             <input id="birthPlace" name="birthPlace" required />
@@ -114,16 +162,42 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
             <input id="lengthOfStay" name="lengthOfStay" required />
 
             <label for="adrsStatus">Address Status</label>
-            <select id="adrsStatus" name="adrsStatus" required >
+            <select id="adrsStatus" name="adrsStatus" required>
               <option value="">-- SELECT ADDRESS STATUS --</option>
-              <option value="Owned">OWNED</option>
-              <option value="Living with Relatives">LIVING WITH RELATIVES</option>
-              <option value="Renting">RENTING</option>
-              <option value="Mortgaged">MORTGAGED</option>
+              <option value="Owned" <?= (isset($_SESSION['adrsStatus']) && $_SESSION['adrsStatus'] === 'Owned') ? 'selected' : '' ?>>OWNED</option>
+              <option value="Living with Relatives" <?= (isset($_SESSION['adrsStatus']) && $_SESSION['adrsStatus'] === 'Living with Relatives') ? 'selected' : '' ?>>LIVING WITH RELATIVES</option>
+              <option value="Renting" <?= (isset($_SESSION['adrsStatus']) && $_SESSION['adrsStatus'] === 'Renting') ? 'selected' : '' ?>>RENTING</option>
+              <option value="Mortgaged" <?= (isset($_SESSION['adrsStatus']) && $_SESSION['adrsStatus'] === 'Mortgaged') ? 'selected' : '' ?>>MORTGAGED</option>
             </select>
 
             <label for="monthlyPay">Monthly Pay</label>
-            <input id="monthlyPay" name="monthlyPay" required />
+            <input type="number" id="monthlyPay" name="monthlyPay" 
+                  value="<?= htmlspecialchars($_SESSION['monthlyPay'] ?? '') ?>" 
+                  <?= (isset($_SESSION['adrsStatus']) && ($_SESSION['adrsStatus'] === 'Mortgaged' || $_SESSION['adrsStatus'] === 'Renting')) ? '' : 'disabled' ?> />
+
+            <script>
+              const adrsStatus = document.getElementById('adrsStatus');
+              const monthlyPay = document.getElementById('monthlyPay');
+
+              function toggleMonthlyPay() {
+                  console.log('Current selection:', adrsStatus.value); // Debug line
+                  
+                  if (adrsStatus.value === 'Mortgaged' || adrsStatus.value === 'Renting') {
+                      monthlyPay.disabled = false;
+                      monthlyPay.required = true;
+                  } else {
+                      monthlyPay.disabled = true;
+                      monthlyPay.required = false;
+                      monthlyPay.value = '';
+                  }
+              }
+
+              // Run immediately (no need for DOMContentLoaded since script is after elements)
+              toggleMonthlyPay();
+
+              // Add event listener
+              adrsStatus.addEventListener('change', toggleMonthlyPay);
+            </script>
           </div>
         </div>
 
@@ -142,46 +216,115 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
             <input id="employerAdd" name="employerAdd" />
 
             <label for="typeOfEmploy">Type of Employment</label>
-            <select id="typeOfEmploy" name="typeOfEmploy" required >
-              <option value="">-- SELECT --</option>
-              <option value="Private">PRIVATE</option>
-              <option value="Government">GOVERNMENT</option>
-              <option value="Professional">PROFESSIONAL</option>
-              <option value="Self-Employed">SELF-EMPLOYED</option>
-              <option value="Unemployed">UNEMPLOYED</option>
-              <option value="Retired">RETIRED</option>
-            </select>
+          <select id="typeOfEmploy" name="typeOfEmploy" required>
+            <option value="">-- SELECT --</option>
+            <option value="Private" <?= (isset($_SESSION['typeOfEmploy']) && $_SESSION['typeOfEmploy'] === 'Private') ? 'selected' : '' ?>>PRIVATE</option>
+            <option value="Government" <?= (isset($_SESSION['typeOfEmploy']) && $_SESSION['typeOfEmploy'] === 'Government') ? 'selected' : '' ?>>GOVERNMENT</option>
+            <option value="Professional" <?= (isset($_SESSION['typeOfEmploy']) && $_SESSION['typeOfEmploy'] === 'Professional') ? 'selected' : '' ?>>PROFESSIONAL</option>
+            <option value="Self-Employed" <?= (isset($_SESSION['typeOfEmploy']) && $_SESSION['typeOfEmploy'] === 'Self-Employed') ? 'selected' : '' ?>>SELF-EMPLOYED</option>
+            <option value="Unemployed" <?= (isset($_SESSION['typeOfEmploy']) && $_SESSION['typeOfEmploy'] === 'Unemployed') ? 'selected' : '' ?>>UNEMPLOYED</option>
+            <option value="Retired" <?= (isset($_SESSION['typeOfEmploy']) && $_SESSION['typeOfEmploy'] === 'Retired') ? 'selected' : '' ?>>RETIRED</option>
+          </select>
 
-            <label for="employStatus">Employment Status</label>
-            <select id="employStatus" name="employStatus">
-              <option value="">-- SELECT --</option>
-              <option value="Permanent">PERMANENT</option>
-              <option value="Probationary">PROBATIONARY</option>
-              <option value="Contractual">CONTRACTUAL</option>
-              <option value="Professional">PROFESSIONAL</option>
-              <option value="Consultant">CONSULTANT</option>
-              <option value="Special Occupation">SPECIAL OCCUPATION</option>
-              <option value="Unemployed">UNEMPLOYED</option>
-            </select>
+          <label for="employStatus">Employment Status</label>
+          <select id="employStatus" name="employStatus" 
+                  <?= (isset($_SESSION['typeOfEmploy']) && ($_SESSION['typeOfEmploy'] === 'Unemployed' || $_SESSION['typeOfEmploy'] === 'Retired')) ? 'disabled' : 'required' ?>>
+            <option value="">-- SELECT --</option>
+            <option value="Permanent" <?= (isset($_SESSION['employStatus']) && $_SESSION['employStatus'] === 'Permanent') ? 'selected' : '' ?>>PERMANENT</option>
+            <option value="Probationary" <?= (isset($_SESSION['employStatus']) && $_SESSION['employStatus'] === 'Probationary') ? 'selected' : '' ?>>PROBATIONARY</option>
+            <option value="Contractual" <?= (isset($_SESSION['employStatus']) && $_SESSION['employStatus'] === 'Contractual') ? 'selected' : '' ?>>CONTRACTUAL</option>
+            <option value="Professional" <?= (isset($_SESSION['employStatus']) && $_SESSION['employStatus'] === 'Professional') ? 'selected' : '' ?>>PROFESSIONAL</option>
+            <option value="Consultant" <?= (isset($_SESSION['employStatus']) && $_SESSION['employStatus'] === 'Consultant') ? 'selected' : '' ?>>CONSULTANT</option>
+            <option value="Special Occupation" <?= (isset($_SESSION['employStatus']) && $_SESSION['employStatus'] === 'Special Occupation') ? 'selected' : '' ?>>SPECIAL OCCUPATION</option>
+          </select>
 
-            <label for="rank">Rank</label>
-            <select id="rank" name="rank" required >
-              <option value="">-- SELECT --</option>
-              <option value="Rank & File">RANK & FILE</option>
-              <option value="Junior Officer">JUNIOR OFFICER</option>
-              <option value="Middle Manager">MIDDLE MANAGER</option>
-              <option value="Senior Executive">SENIOR EXECUTIVE</option>
-              <option value="Self-Employed">SELF-EMPLOYED</option>
-              <option value="Others">OTHERS</option>
-            </select>
+          <label for="rank">Rank</label>
+          <select id="rank" name="rank" 
+                  <?= (isset($_SESSION['typeOfEmploy']) && ($_SESSION['typeOfEmploy'] === 'Unemployed' || $_SESSION['typeOfEmploy'] === 'Retired')) ? 'disabled' : 'required' ?>>
+            <option value="">-- SELECT --</option>
+            <option value="Rank & File" <?= (isset($_SESSION['rank']) && $_SESSION['rank'] === 'Rank & File') ? 'selected' : '' ?>>RANK & FILE</option>
+            <option value="Junior Officer" <?= (isset($_SESSION['rank']) && $_SESSION['rank'] === 'Junior Officer') ? 'selected' : '' ?>>JUNIOR OFFICER</option>
+            <option value="Middle Manager" <?= (isset($_SESSION['rank']) && $_SESSION['rank'] === 'Middle Manager') ? 'selected' : '' ?>>MIDDLE MANAGER</option>
+            <option value="Senior Executive" <?= (isset($_SESSION['rank']) && $_SESSION['rank'] === 'Senior Executive') ? 'selected' : '' ?>>SENIOR EXECUTIVE</option>
+            <option value="Self-Employed" <?= (isset($_SESSION['rank']) && $_SESSION['rank'] === 'Self-Employed') ? 'selected' : '' ?>>SELF-EMPLOYED</option>
+            <option value="Others" <?= (isset($_SESSION['rank']) && $_SESSION['rank'] === 'Others') ? 'selected' : '' ?>>OTHERS</option>
+          </select>
 
-            <div id="otherRankContainer" style="display: none; margin-top: 10px;">
-              <label for="otherRank">Please specify</label>
-              <input type="text" id="otherRank" name="otherRank" />
-            </div>
+          <div id="otherRankContainer" style="<?= (isset($_SESSION['rank']) && $_SESSION['rank'] === 'Others') ? 'display: block;' : 'display: none;' ?> margin-top: 10px;">
+            <label for="otherRank">Please specify</label>
+            <input type="text" id="otherRank" name="otherRank" 
+                  value="<?= htmlspecialchars($_SESSION['otherRank'] ?? '') ?>"
+                  <?= (isset($_SESSION['typeOfEmploy']) && ($_SESSION['typeOfEmploy'] === 'Unemployed' || $_SESSION['typeOfEmploy'] === 'Retired')) ? 'disabled' : '' ?> />
+          </div>
 
-            <label for="curPosition">Current Position</label>
-            <input id="curPosition" name="curPosition" />
+          <label for="curPosition">Current Position</label>
+          <input type="text" id="curPosition" name="curPosition" 
+                value="<?= htmlspecialchars($_SESSION['curPosition'] ?? '') ?>"
+                <?= (isset($_SESSION['typeOfEmploy']) && ($_SESSION['typeOfEmploy'] === 'Unemployed' || $_SESSION['typeOfEmploy'] === 'Retired')) ? 'disabled' : '' ?> />
+
+          <script>
+            const typeOfEmploy = document.getElementById('typeOfEmploy');
+            const employStatus = document.getElementById('employStatus');
+            const rank = document.getElementById('rank');
+            const otherRankContainer = document.getElementById('otherRankContainer');
+            const otherRank = document.getElementById('otherRank');
+            const curPosition = document.getElementById('curPosition');
+
+            function toggleEmploymentFields() {
+                console.log('Employment type:', typeOfEmploy.value); // Debug line
+                
+                const shouldDisable = typeOfEmploy.value === 'Unemployed' || typeOfEmploy.value === 'Retired';
+                
+                if (shouldDisable) {
+                    // Disable fields but keep them visible
+                    employStatus.disabled = true;
+                    rank.disabled = true;
+                    otherRank.disabled = true;
+                    curPosition.disabled = true;
+                    // Remove required attributes
+                    employStatus.required = false;
+                    rank.required = false;
+                    otherRank.required = false;
+                    // Clear values
+                    employStatus.value = '';
+                    rank.value = '';
+                    otherRank.value = '';
+                    curPosition.value = '';
+                    otherRankContainer.style.display = 'none';
+                } else {
+                    // Enable fields
+                    employStatus.disabled = false;
+                    rank.disabled = false;
+                    otherRank.disabled = false;
+                    curPosition.disabled = false;
+                    // Add required attributes back
+                    employStatus.required = true;
+                    rank.required = true;
+                }
+            }
+
+            function toggleOtherRank() {
+                console.log('Rank selected:', rank.value); // Debug line
+                
+                // Only show "Others" field if rank is not disabled and "Others" is selected
+                if (!rank.disabled && rank.value === 'Others') {
+                    otherRankContainer.style.display = 'block';
+                    otherRank.required = true;
+                } else {
+                    otherRankContainer.style.display = 'none';
+                    otherRank.required = false;
+                    otherRank.value = '';
+                }
+            }
+
+            // Run on page load
+            toggleEmploymentFields();
+            toggleOtherRank();
+
+            // Add event listeners
+            typeOfEmploy.addEventListener('change', toggleEmploymentFields);
+            rank.addEventListener('change', toggleOtherRank);
+          </script>
 
             <label for="sssNum">SSS Number</label>
             <input id="sssNum" name="sssNum" />

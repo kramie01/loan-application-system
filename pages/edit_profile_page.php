@@ -172,7 +172,7 @@ while ($row = $cardResult->fetch_assoc()) {
         <input id="lengthOfStay" name="lengthOfStay" value="<?= htmlspecialchars($applicant['lengthOfStay'] ?? '') ?>" required />
 
         <label for="adrsStatus">Address Status</label>
-        <select id="adrsStatus" name="adrsStatus" required >
+        <select id="adrsStatus" name="adrsStatus" required>
           <option value="">-- SELECT ADDRESS STATUS --</option>
           <option value="Owned" <?= $applicant['adrsStatus'] === 'Owned' ? 'selected' : '' ?>>OWNED</option>
           <option value="Living with Relatives" <?= $applicant['adrsStatus'] === 'Living with Relatives' ? 'selected' : '' ?>>LIVING WITH RELATIVES</option>
@@ -181,29 +181,33 @@ while ($row = $cardResult->fetch_assoc()) {
         </select>
 
         <label for="monthlyPay">Monthly Pay</label>
-        <input id="monthlyPay" name="monthlyPay" value="<?= htmlspecialchars($applicant['monthlyPay'] ?? '') ?>" required
-        <?= ($applicant['adrsStatus'] !== 'Mortgaged' && $applicant['adrsStatus'] !== 'Renting') ? 'disabled' : '' ?> />
+        <input type="number" id="monthlyPay" name="monthlyPay" 
+              value="<?= htmlspecialchars($applicant['monthlyPay'] ?? '') ?>" 
+              <?= ($applicant['adrsStatus'] === 'Mortgaged' || $applicant['adrsStatus'] === 'Renting') ? 'required' : 'disabled' ?> />
 
         <script>
           const adrsStatus = document.getElementById('adrsStatus');
           const monthlyPay = document.getElementById('monthlyPay');
 
           function toggleMonthlyPay() {
-              if (adrsStatus.value === 'Mortgaged') {
-                  monthlyPay.disabled = false;  // enable input
-              }
-              else if (adrsStatus.value === 'Renting') {
-                  monthlyPay.disabled = false;  // enable input
+              console.log('Current address status:', adrsStatus.value); // Debug line
+              
+              const isPaymentRequired = adrsStatus.value === 'Mortgaged' || adrsStatus.value === 'Renting';
+              
+              if (isPaymentRequired) {
+                  monthlyPay.disabled = false;
+                  monthlyPay.required = true;
               } else {
-                  monthlyPay.disabled = true;   // disable input
-                  monthlyPay.value = '';        // optionally clear value
+                  monthlyPay.disabled = true;
+                  monthlyPay.required = false;
+                  monthlyPay.value = '';
               }
           }
 
-          // Run on page load in case the value is pre-selected
+          // Run on page load
           toggleMonthlyPay();
 
-          // Add event listener to toggle on change
+          // Add event listener
           adrsStatus.addEventListener('change', toggleMonthlyPay);
         </script>
       </div>
@@ -224,7 +228,7 @@ while ($row = $cardResult->fetch_assoc()) {
             <input id="employerAdd" name="employerAdd" value="<?= htmlspecialchars($applicant['employerAdd'] ?? '') ?>" />
 
             <label for="typeOfEmploy">Type of Employment</label>
-            <select id="typeOfEmploy" name="typeOfEmploy" required >
+            <select id="typeOfEmploy" name="typeOfEmploy" required>
               <option value="">-- SELECT --</option>
               <option value="Private" <?= $applicant['typeOfEmploy'] === 'Private' ? 'selected' : '' ?>>PRIVATE</option>
               <option value="Government" <?= $applicant['typeOfEmploy'] === 'Government' ? 'selected' : '' ?>>GOVERNMENT</option>
@@ -235,7 +239,8 @@ while ($row = $cardResult->fetch_assoc()) {
             </select>
 
             <label for="employStatus">Employment Status</label>
-            <select id="employStatus" name="employStatus" >
+            <select id="employStatus" name="employStatus" 
+                    <?= ($applicant['typeOfEmploy'] === 'Unemployed' || $applicant['typeOfEmploy'] === 'Retired') ? 'disabled' : 'required' ?>>
               <option value="">-- SELECT --</option>
               <option value="Permanent" <?= $applicant['employStatus'] === 'Permanent' ? 'selected' : '' ?>>PERMANENT</option>
               <option value="Probationary" <?= $applicant['employStatus'] === 'Probationary' ? 'selected' : '' ?>>PROBATIONARY</option>
@@ -243,12 +248,11 @@ while ($row = $cardResult->fetch_assoc()) {
               <option value="Professional" <?= $applicant['employStatus'] === 'Professional' ? 'selected' : '' ?>>PROFESSIONAL</option>
               <option value="Consultant" <?= $applicant['employStatus'] === 'Consultant' ? 'selected' : '' ?>>CONSULTANT</option>
               <option value="Special Occupation" <?= $applicant['employStatus'] === 'Special Occupation' ? 'selected' : '' ?>>SPECIAL OCCUPATION</option>
-              <option value="Unemployed" <?= $applicant['employStatus'] === 'Unemployed' ? 'selected' : '' ?>>UNEMPLOYED</option>
-
             </select>
 
             <label for="rank">Rank</label>
-            <select id="rank" name="rank" required >
+            <select id="rank" name="rank" 
+                    <?= ($applicant['typeOfEmploy'] === 'Unemployed' || $applicant['typeOfEmploy'] === 'Retired') ? 'disabled' : 'required' ?>>
               <option value="">-- SELECT --</option>
               <option value="Rank & File" <?= $applicant['rank'] === 'Rank & File' ? 'selected' : '' ?>>RANK & FILE</option>
               <option value="Junior Officer" <?= $applicant['rank'] === 'Junior Officer' ? 'selected' : '' ?>>JUNIOR OFFICER</option>
@@ -260,11 +264,75 @@ while ($row = $cardResult->fetch_assoc()) {
 
             <div id="otherRankContainer" style="<?= ($applicant['rank'] ?? '') === 'Others' ? 'display: block;' : 'display: none;' ?>; margin-top: 10px;">
               <label for="otherRank">Please specify</label>
-              <input type="text" id="otherRank" name="otherRank" value="<?= htmlspecialchars($applicant['otherRank'] ?? '') ?>" readonly />
+              <input type="text" id="otherRank" name="otherRank" 
+                    value="<?= htmlspecialchars($applicant['otherRank'] ?? '') ?>" 
+                    <?= ($applicant['typeOfEmploy'] === 'Unemployed' || $applicant['typeOfEmploy'] === 'Retired') ? 'disabled' : '' ?> />
             </div>
 
             <label for="curPosition">Current Position</label>
-            <input id="curPosition" name="curPosition" value="<?= htmlspecialchars($applicant['curPosition'] ?? '') ?>" />
+            <input type="text" id="curPosition" name="curPosition" 
+                  value="<?= htmlspecialchars($applicant['curPosition'] ?? '') ?>"
+                  <?= ($applicant['typeOfEmploy'] === 'Unemployed' || $applicant['typeOfEmploy'] === 'Retired') ? 'disabled' : '' ?> />
+
+            <script>
+              const typeOfEmploy = document.getElementById('typeOfEmploy');
+              const employStatus = document.getElementById('employStatus');
+              const rank = document.getElementById('rank');
+              const otherRankContainer = document.getElementById('otherRankContainer');
+              const otherRank = document.getElementById('otherRank');
+              const curPosition = document.getElementById('curPosition');
+
+              function toggleEmploymentFields() {
+                  console.log('Employment type:', typeOfEmploy.value);
+                  
+                  const shouldDisable = typeOfEmploy.value === 'Unemployed' || typeOfEmploy.value === 'Retired';
+                  
+                  if (shouldDisable) {
+                      employStatus.disabled = true;
+                      rank.disabled = true;
+                      otherRank.disabled = true;
+                      curPosition.disabled = true;
+                      employStatus.required = false;
+                      rank.required = false;
+                      otherRank.required = false;
+                      employStatus.value = '';
+                      rank.value = '';
+                      otherRank.value = '';
+                      curPosition.value = '';
+                      otherRankContainer.style.display = 'none';
+                  } else {
+                      employStatus.disabled = false;
+                      rank.disabled = false;
+                      otherRank.disabled = false;
+                      curPosition.disabled = false;
+                      employStatus.required = true;
+                      rank.required = true;
+                  }
+              }
+
+              function toggleOtherRank() {
+                  console.log('Rank selected:', rank.value);
+                  
+                  if (!rank.disabled && rank.value === 'Others') {
+                      otherRankContainer.style.display = 'block';
+                      otherRank.required = true;
+                  } else {
+                      otherRankContainer.style.display = 'none';
+                      otherRank.required = false;
+                      if (rank.value !== 'Others') {
+                          otherRank.value = '';
+                      }
+                  }
+              }
+
+              // Run on page load
+              toggleEmploymentFields();
+              toggleOtherRank();
+
+              // Add event listeners
+              typeOfEmploy.addEventListener('change', toggleEmploymentFields);
+              rank.addEventListener('change', toggleOtherRank);
+            </script>
 
             <label for="sssNum">SSS Number</label>
             <input id="sssNum" name="sssNum" value="<?= htmlspecialchars($applicant['sssNum'] ?? '') ?>" readonly />

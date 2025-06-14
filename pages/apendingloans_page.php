@@ -20,13 +20,14 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $password, $options);
     
-    // Get all pending loan applications
+    // Get all pending loan applications - using applicantID as the foreign key
     $stmt = $pdo->prepare("
         SELECT 
             l.loan_id,
             l.loanAmount,
             l.paymentTerm,
             l.loanPurpose,
+            l.applicantID,
             a.applicantName,
             a.emailAdrs,
             a.mobilePNum,
@@ -128,9 +129,14 @@ try {
                                             </div>
                                         </td>
                                         <td class="action">
-                                            <button class="btn btn-approve1" onclick="approveLoan(<?php echo $loan['loan_id']; ?>, '<?php echo htmlspecialchars($loan['applicantName']); ?>')">
-                                                Approve
-                                            </button>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-view" onclick="viewProfile(<?php echo $loan['applicantID']; ?>, <?php echo $loan['loan_id']; ?>)">
+                                                    VIEW PROFILE
+                                                </button>
+                                                <button class="btn btn-approve1" onclick="approveLoan(<?php echo $loan['loan_id']; ?>, '<?php echo htmlspecialchars($loan['applicantName']); ?>')">
+                                                    APPROVE
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -165,6 +171,22 @@ try {
         </div>
     </div>
 
-    <script src="../assets/js/adashboard_script.js"></script>
+    <!-- View Profile Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content profile-modal-content">
+            <div class="modal-header">
+                <h4>Applicant Profile</h4>
+                <span class="close" onclick="closeProfileModal()">&times;</span>
+            </div>
+            <div class="modal-body profile-modal-body">
+                <div id="profileContent">
+                    <div class="loading">Loading profile...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/admin_script.js"></script>
+
 </body>
 </html>
