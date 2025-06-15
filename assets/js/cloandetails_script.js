@@ -1,5 +1,4 @@
 // Loan Details JavaScript Functions
-
 function openUpdateModal(loan_id, amount, term, purpose) {
   const modal = document.getElementById("updateModal")
   const form = document.getElementById("updateLoanForm")

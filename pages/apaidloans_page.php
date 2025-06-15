@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require_once '../includes/config.php';
 
@@ -42,100 +43,102 @@ try {
 } catch (PDOException $e) {
     $error = "Database error: " . $e->getMessage();
 }
+
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin - View Paid Loans</title>
-    <link rel="stylesheet" href="../assets/css/admin_style.css" />
-</head>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <title>Admin - View Paid Loans</title>
+            <link rel="stylesheet" href="../assets/css/admin_style.css" />
+        </head>
 
-<body>
-    <header>
-        <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
-        <h1>LendEase - Admin Loan Application System</h1>
-    </header>
+        <body>
+            <header>
+                <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
+                <h1>LendEase - Admin Loan Application System</h1>
+            </header>
 
-    <div class="main-container">
-        <!-- Sidebar Navigation -->
-        <div class="sidebar">
-            <a href="../pages/adashboard_page.php">Dashboard</a>
-            <a href="../pages/apendingloans_page.php">Pending Loans</a>
-            <a href="../pages/aactiveloans_page.php">Active Loans</a>
-            <a href="../pages/apaidloans_page.php" class="active">Paid Loans</a>
-            <a href="../auth/logout.php">Logout</a>
-        </div>
+            <div class="main-container">
+                
+                <!-- Sidebar Navigation -->
+                <div class="sidebar">
+                    <a href="../pages/adashboard_page.php">Dashboard</a>
+                    <a href="../pages/apendingloans_page.php">Pending Loans</a>
+                    <a href="../pages/aactiveloans_page.php">Active Loans</a>
+                    <a href="../pages/apaidloans_page.php" class="active">Paid Loans</a>
+                    <a href="../auth/logout.php">Logout</a>
+                </div>
 
-        <div class="content">
+                <div class="content">
 
-            <h1>PAID LOAN APPLICATIONS</h1>
-            <p>View paid loan applications.</p>
+                    <h1>PAID LOAN APPLICATIONS</h1>
+                    <p>View paid loan applications.</p>
 
-            <section class="loan-details-section">
-                <h3>Paid Loans</h3>
-                <p style="margin-bottom: 20px; color: #666;">View all completed loan accounts</p>
+                    <section class="loan-details-section">
+                        <h3>Paid Loans</h3>
+                        <p style="margin-bottom: 20px; color: #666;">View all completed loan accounts</p>
 
-                <?php if (isset($error)): ?>
-                    <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
-                <?php elseif (empty($paidLoans)): ?>
-                    <div class="no-loans-message">
-                        <p>No paid loans at this time.</p>
-                    </div>
-                <?php else: ?>
-                    <div class="loan-table-container">
-                        <table class="loan-table">
-                            <thead>
-                                <tr>
-                                    <th>LOAN ID</th>
-                                    <th>APPLICANT</th>
-                                    <th>LOAN DETAILS</th>
-                                    <th>STATUS</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($paidLoans as $loan): ?>
-                                    <tr>
-                                        <td class="loan-id">
-                                            <?php echo 'L' . str_pad($loan['loan_id'], 3, '0', STR_PAD_LEFT); ?>
-                                        </td>
-                                        <td class="loan-details">
-                                            <div class="detail-item">
-                                                <strong>Name:</strong> <?php echo htmlspecialchars($loan['applicantName']); ?>
-                                            </div>
-                                            <div class="detail-item">
-                                                <strong>Email:</strong> <?php echo htmlspecialchars($loan['emailAdrs']); ?>
-                                            </div>
-                                            <div class="detail-item">
-                                                <strong>Phone:</strong> <?php echo htmlspecialchars($loan['mobilePNum']); ?>
-                                            </div>
-                                        </td>
-                                        <td class="loan-details">
-                                            <div class="detail-item">
-                                                <strong>Amount:</strong> ₱<?php echo number_format($loan['loanAmount'], 2); ?>
-                                            </div>
-                                            <div class="detail-item">
-                                                <strong>Term:</strong> <?php echo htmlspecialchars($loan['paymentTerm']); ?> months
-                                            </div>
-                                            <div class="detail-item">
-                                                <strong>Purpose:</strong> <?php echo htmlspecialchars($loan['loanPurpose']); ?>
-                                            </div>
-                                        </td>
-                                        <td class="status">
-                                            <span class="status-badge status-paid">
-                                                Paid
-                                            </span>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                <?php endif; ?>
-            </section>
-        </div>
-    </div>
-</body>
-</html>
+                        <?php if (isset($error)): ?>
+                            <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
+                        <?php elseif (empty($paidLoans)): ?>
+                            <div class="no-loans-message">
+                                <p>No paid loans at this time.</p>
+                            </div>
+                        <?php else: ?>
+                            <div class="loan-table-container">
+                                <table class="loan-table">
+                                    <thead>
+                                        <tr>
+                                            <th>LOAN ID</th>
+                                            <th>APPLICANT</th>
+                                            <th>LOAN DETAILS</th>
+                                            <th>STATUS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($paidLoans as $loan): ?>
+                                            <tr>
+                                                <td class="loan-id">
+                                                    <?php echo 'L' . str_pad($loan['loan_id'], 3, '0', STR_PAD_LEFT); ?>
+                                                </td>
+                                                <td class="loan-details">
+                                                    <div class="detail-item">
+                                                        <strong>Name:</strong> <?php echo htmlspecialchars($loan['applicantName']); ?>
+                                                    </div>
+                                                    <div class="detail-item">
+                                                        <strong>Email:</strong> <?php echo htmlspecialchars($loan['emailAdrs']); ?>
+                                                    </div>
+                                                    <div class="detail-item">
+                                                        <strong>Phone:</strong> <?php echo htmlspecialchars($loan['mobilePNum']); ?>
+                                                    </div>
+                                                </td>
+                                                <td class="loan-details">
+                                                    <div class="detail-item">
+                                                        <strong>Amount:</strong> ₱<?php echo number_format($loan['loanAmount'], 2); ?>
+                                                    </div>
+                                                    <div class="detail-item">
+                                                        <strong>Term:</strong> <?php echo htmlspecialchars($loan['paymentTerm']); ?> months
+                                                    </div>
+                                                    <div class="detail-item">
+                                                        <strong>Purpose:</strong> <?php echo htmlspecialchars($loan['loanPurpose']); ?>
+                                                    </div>
+                                                </td>
+                                                <td class="status">
+                                                    <span class="status-badge status-paid">
+                                                        Paid
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                    </section>
+                </div>
+            </div>
+        </body>
+    </html>

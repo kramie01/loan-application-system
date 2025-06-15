@@ -1,5 +1,3 @@
-// Profile View JavaScript Functions
-
 // Open delete account modal
 function openDeleteAccountModal() {
   const modal = document.getElementById("deleteAccountModal")

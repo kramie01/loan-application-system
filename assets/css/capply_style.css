@@ -33,7 +33,7 @@ header img {
 
 header h1 {
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* Layout */
@@ -208,8 +208,8 @@ textarea {
 }
 
 .credit-card-group {
-  position: relative; /* allows absolute positioning of the remove button */
-  padding-right: 32px; /* space for the remove button */
+  position: relative; 
+  padding-right: 32px; 
 }
 
 /* Style for the "X" remove button */
@@ -234,19 +234,16 @@ textarea {
   background-color: #c0392b;
 }
 
-/* Special Container (e.g., for conditional fields) */
 #otherRankContainer, #otherPurposeContainer {
   grid-column: 1 / -1;
 }
 
-/* Optional: Style the readonly fields subtly */
 input[readonly] {
   background-color: #eee;
   color: #666;
   cursor: not-allowed;
 }
 
-/* Optional: Style required fields visually */
 input:required,
 select:required,
 textarea:required {
@@ -254,8 +251,8 @@ textarea:required {
 }
 
 .form-submit-btn {
-  background-color: #153851; /* Dark blue */
-  color: #ffffff; /* White text */
+  background-color: #153851; 
+  color: #ffffff; 
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
@@ -266,17 +263,17 @@ textarea:required {
 }
 
 .form-submit-btn:hover {
-  background-color: #0870ba; /* Lighter blue on hover */
+  background-color: #0870ba; 
   transform: translateY(-2px);
 }
 
 .form-submit-btn:active {
   transform: translateY(0);
-  background-color: #128de5; /* Slightly different shade when clicked */
+  background-color: #128de5; 
 }
 
 .form-cancel-btn {
-  background-color: #e74c3c; /* Red */
+  background-color: #e74c3c; 
   color: #ffffff;
   padding: 12px 24px;
   border: none;
@@ -285,11 +282,11 @@ textarea:required {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-left: auto; /* Optional: helps with alignment if in flex container */
+  margin-left: auto;
 }
 
 .form-cancel-btn:hover {
-  background-color: #c0392b; /* Darker red on hover */
+  background-color: #c0392b; 
   transform: translateY(2px);
 }
 

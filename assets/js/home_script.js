@@ -76,7 +76,6 @@ function closeAccountDeletedModal() {
   }
 }
 
-
 // Close modal when clicking outside
 window.onclick = (event) => {
   const modal = document.getElementById("accountDeletedModal")
