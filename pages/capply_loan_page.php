@@ -109,30 +109,30 @@ try {
 
                                 <label for="paymentTerm">Payment Term (months)</label>
                                 <select id="paymentTerm" name="paymentTerm" required >
-                                    <option value="">-- Select Term --</option>
-                                    <option value="6">6 months</option>
-                                    <option value="12">12 months</option>
-                                    <option value="18">18 months</option>
-                                    <option value="24">24 months</option>
-                                    <option value="36">36 months</option>
+                                    <option value="">-- SELECT TERM --</option>
+                                    <option value="6">6 MONTHS</option>
+                                    <option value="12">12 MONTHS</option>
+                                    <option value="18">18 MONTHS</option>
+                                    <option value="24">24 MONTHS</option>
+                                    <option value="36">36 MONTHS</option>
                                 </select>
 
                                 <label for="loanPurpose">Loan Purpose</label>
                                 <select id="loanPurpose" name="loanPurpose" required >
-                                    <option value="">-- Select Purpose --</option>
-                                    <option value="Travel">Travel</option>
-                                    <option value="Appliance/s">Appliance/s</option>
-                                    <option value="Furniture/Fixtures">Furniture/Fixtures</option>
-                                    <option value="Electronic Gadgets">Electronic Gadgets</option>
-                                    <option value="Personal Consumption">Personal Consumption</option>
-                                    <option value="Hospitalization">Hospitalization</option>
-                                    <option value="Health & Wellness">Health & Wellness</option>
-                                    <option value="Education">Education</option>
-                                    <option value="Balance Transfer">Balance Transfer</option>
-                                    <option value="Special Events">Special Events</option>
-                                    <option value="Home Improvement">Home Improvement</option>
-                                    <option value="Car Repair">Car Repair</option>
-                                    <option value="Others">Others</option>
+                                    <option value="">-- SELECT PURPOSE --</option>
+                                    <option value="Travel">TRAVEL</option>
+                                    <option value="Appliance/s">APPLIANCE/S</option>
+                                    <option value="Furniture/Fixtures">FURNITURE/FIXTURES</option>
+                                    <option value="Electronic Gadgets">ELECTRONIC GADGETS/DEVICES</option>
+                                    <option value="Personal Consumption">PERSONAL CONSUMPTION</option>
+                                    <option value="Hospitalization">HOSPITALIZATION</option>
+                                    <option value="Health & Wellness">HEALTH & WELLNESS</option>
+                                    <option value="Education">EDUCATION</option>
+                                    <option value="Balance Transfer">BALANCE TRANSFER</option>
+                                    <option value="Special Events">SPECIAL EVENTS</option>
+                                    <option value="Home Improvement">HOME IMPROVEMENT</option>
+                                    <option value="Car Repair">CAR REPAIR</option>
+                                    <option value="Others">OTHERS</option>
                                 </select>
 
                                 <div id="otherPurposeContainer" style="display:none;">

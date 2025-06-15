@@ -224,12 +224,6 @@ while ($row = $cardResult->fetch_assoc()) {
               <label for="tinNumber">TIN Number</label>
               <input id="tinNumber" name="tinNumber" value="<?= htmlspecialchars($applicant['tinNumber'] ?? '') ?>" required readonly />
 
-              <label for="employerName">Employer Name</label>
-              <input id="employerName" name="employerName" value="<?= htmlspecialchars($applicant['employerName'] ?? '') ?>" />
-
-              <label for="employerAdd">Employer Address</label>
-              <input id="employerAdd" name="employerAdd" value="<?= htmlspecialchars($applicant['employerAdd'] ?? '') ?>" />
-
               <label for="typeOfEmploy">Type of Employment</label>
               <select id="typeOfEmploy" name="typeOfEmploy" required>
                 <option value="">-- SELECT --</option>
@@ -277,73 +271,16 @@ while ($row = $cardResult->fetch_assoc()) {
                     value="<?= htmlspecialchars($applicant['curPosition'] ?? '') ?>"
                     <?= ($applicant['typeOfEmploy'] === 'Unemployed' || $applicant['typeOfEmploy'] === 'Retired') ? 'disabled' : '' ?> />
 
-              <script>
-                const typeOfEmploy = document.getElementById('typeOfEmploy');
-                const employStatus = document.getElementById('employStatus');
-                const rank = document.getElementById('rank');
-                const otherRankContainer = document.getElementById('otherRankContainer');
-                const otherRank = document.getElementById('otherRank');
-                const curPosition = document.getElementById('curPosition');
+              <label for="employerName">Employer Name</label>
+              <input id="employerName" name="employerName" value="<?= htmlspecialchars($applicant['employerName'] ?? '') ?>" />
 
-                function toggleEmploymentFields() {
-                    console.log('Employment type:', typeOfEmploy.value);
-                    
-                    const shouldDisable = typeOfEmploy.value === 'Unemployed' || typeOfEmploy.value === 'Retired';
-                    
-                    if (shouldDisable) {
-                        employStatus.disabled = true;
-                        rank.disabled = true;
-                        otherRank.disabled = true;
-                        curPosition.disabled = true;
-                        employStatus.required = false;
-                        rank.required = false;
-                        otherRank.required = false;
-                        employStatus.value = '';
-                        rank.value = '';
-                        otherRank.value = '';
-                        curPosition.value = '';
-                        otherRankContainer.style.display = 'none';
-                    } else {
-                        employStatus.disabled = false;
-                        rank.disabled = false;
-                        otherRank.disabled = false;
-                        curPosition.disabled = false;
-                        employStatus.required = true;
-                        rank.required = true;
-                    }
-                }
-
-                function toggleOtherRank() {
-                    console.log('Rank selected:', rank.value);
-                    
-                    if (!rank.disabled && rank.value === 'Others') {
-                        otherRankContainer.style.display = 'block';
-                        otherRank.required = true;
-                    } else {
-                        otherRankContainer.style.display = 'none';
-                        otherRank.required = false;
-                        if (rank.value !== 'Others') {
-                            otherRank.value = '';
-                        }
-                    }
-                }
-
-                // Run on page load
-                toggleEmploymentFields();
-                toggleOtherRank();
-
-                // Add event listeners
-                typeOfEmploy.addEventListener('change', toggleEmploymentFields);
-                rank.addEventListener('change', toggleOtherRank);
-              </script>
-
-              <label for="sssNum">SSS Number</label>
-              <input id="sssNum" name="sssNum" value="<?= htmlspecialchars($applicant['sssNum'] ?? '') ?>" readonly />
+              <label for="employerAdd">Employer Address</label>
+              <input id="employerAdd" name="employerAdd" value="<?= htmlspecialchars($applicant['employerAdd'] ?? '') ?>" />
 
               <label for="dateOfHire">Date of Hire</label>
               <input id="dateOfHire" type="date" name="dateOfHire" value="<?= htmlspecialchars($applicant['dateOfHire'] ?? '') ?>"  />
 
-              <label for="curLengthService">Current Length of Service</label>
+              <label for="curLengthService">Current Length of Service (Year/s)</label>
               <input id="curLengthService" name="curLengthService" value="<?= htmlspecialchars($applicant['curLengthService'] ?? '') ?>"  />
 
               <label for="officeNum">Office Number</label>
@@ -361,17 +298,136 @@ while ($row = $cardResult->fetch_assoc()) {
               <label for="dayToCall">Best Day to Call</label>
               <input id="dayToCall" name="dayToCall" value="<?= htmlspecialchars($applicant['dayToCall'] ?? '') ?>"  />
 
+              <script>
+              const typeOfEmploy = document.getElementById('typeOfEmploy');
+              const employStatus = document.getElementById('employStatus');
+              const rank = document.getElementById('rank');
+              const otherRankContainer = document.getElementById('otherRankContainer');
+              const otherRank = document.getElementById('otherRank');
+              const curPosition = document.getElementById('curPosition');
+              const dateOfHire = document.getElementById('dateOfHire');
+              const employerName = document.getElementById('employerName');
+              const employerAdd = document.getElementById('employerAdd');
+              const curLengthService = document.getElementById('curLengthService'); 
+              const officeNum = document.getElementById('officeNum'); 
+              const officeEmailAdd = document.getElementById('officeEmailAdd'); 
+              const hrContactPerson = document.getElementById('hrContactPerson'); 
+              const officeTelNum = document.getElementById('officeTelNum');
+              const dayToCall = document.getElementById('dayToCall'); 
+
+              function toggleEmploymentFields() {
+                  console.log('Employment type:', typeOfEmploy.value); // Debug line
+                  
+                  const shouldDisable = typeOfEmploy.value === 'Unemployed' || typeOfEmploy.value === 'Retired';
+                  
+                  if (shouldDisable) {
+                      // Disable fields but keep them visible
+                      employStatus.disabled = true;
+                      rank.disabled = true;
+                      otherRank.disabled = true;
+                      curPosition.disabled = true;
+                      dateOfHire.disabled = true;
+                      employerName.disabled = true;
+                      employerAdd.disabled = true;
+                      curLengthService.disabled = true; 
+                      officeNum.disabled = true; 
+                      officeEmailAdd.disabled = true; 
+                      hrContactPerson.disabled = true; 
+                      officeTelNum.disabled = true; 
+                      dayToCall.disabled = true; 
+                      
+                      // Remove required attributes
+                      employStatus.required = false;
+                      rank.required = false;
+                      otherRank.required = false;
+                      dateOfHire.required = false;
+                      employerName.required = false;
+                      employerAdd.required = false;
+                      curLengthService.required = false; 
+                      officeNum.required = false; 
+                      officeEmailAdd.required = false; 
+                      hrContactPerson.required = false; 
+                      officeTelNum.required = false; 
+                      dayToCall.required = false; 
+                      
+                      // Clear values
+                      employStatus.value = '';
+                      rank.value = '';
+                      otherRank.value = '';
+                      curPosition.value = '';
+                      dateOfHire.value = '';
+                      employerName.value = '';
+                      employerAdd.value = '';
+                      curLengthService.value = ''; 
+                      officeNum.value = ''; 
+                      officeEmailAdd.value = ''; 
+                      hrContactPerson.value = ''; 
+                      officeTelNum.value = ''; 
+                      dayToCall.value = ''; 
+                      otherRankContainer.style.display = 'none';
+                  } else {
+                      // Enable fields
+                      employStatus.disabled = false;
+                      rank.disabled = false;
+                      otherRank.disabled = false;
+                      curPosition.disabled = false;
+                      dateOfHire.disabled = false;
+                      employerName.disabled = false;
+                      employerAdd.disabled = false;
+                      curLengthService.disabled = false; 
+                      officeNum.disabled = false;
+                      officeEmailAdd.disabled = false; 
+                      hrContactPerson.disabled = false; 
+                      officeTelNum.disabled = false; 
+                      dayToCall.disabled = false; 
+                      
+                      // Add required attributes back
+                      employStatus.required = true;
+                      rank.required = true;
+                      dateOfHire.required = true;
+                      employerName.required = true;
+                      employerAdd.required = true;
+                      curLengthService.required = true; 
+                  }
+              }
+
+              function toggleOtherRank() {
+                  console.log('Rank selected:', rank.value); // Debug line
+                  
+                  // Only show "Others" field if rank is not disabled and "Others" is selected
+                  if (!rank.disabled && rank.value === 'Others') {
+                      otherRankContainer.style.display = 'block';
+                      otherRank.required = true;
+                  } else {
+                      otherRankContainer.style.display = 'none';
+                      otherRank.required = false;
+                      otherRank.value = '';
+                  }
+              }
+
+              // Run on page load
+              toggleEmploymentFields();
+              toggleOtherRank();
+
+              // Add event listeners
+              typeOfEmploy.addEventListener('change', toggleEmploymentFields);
+              rank.addEventListener('change', toggleOtherRank);
+              </script>
+
+              <label for="sssNum">SSS Number</label>
+              <input id="sssNum" name="sssNum" value="<?= htmlspecialchars($applicant['sssNum'] ?? '') ?>" readonly />
+
               <label for="prevEmployer">Previous Employer</label>
               <input id="prevEmployer" name="prevEmployer" value="<?= htmlspecialchars($applicant['prevEmployer'] ?? '') ?>"  />
 
-              <label for="prevLengthService">Previous Length of Service</label>
+              <label for="prevLengthService">Previous Length of Service (Year/s)</label>
               <input id="prevLengthService" name="prevLengthService" value="<?= htmlspecialchars($applicant['prevLengthService'] ?? '') ?>"  />
 
               <label for="prevPosition">Previous Position</label>
               <input id="prevPosition" name="prevPosition" value="<?= htmlspecialchars($applicant['prevPosition'] ?? '') ?>"  />
 
               <label for="totalYrsWorking">Total Years Working</label>
-              <input id="totalYrsWorking" name="totalYrsWorking" value="<?= htmlspecialchars($applicant['totalYrsWorking'] ?? '') ?>" required />
+              <input id="totalYrsWorking" name="totalYrsWorking" value="<?= htmlspecialchars($applicant['totalYrsWorking'] ?? '') ?>" />
               </div>
             </div>
 

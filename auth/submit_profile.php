@@ -63,6 +63,12 @@ try {
         $rank = $_POST['otherRank'];
     }
 
+    // Handle Date of Hire - set to NULL if empty or if unemployed/retired
+    $dateOfHire = null;
+    if ($_POST['typeOfEmploy'] !== 'Unemployed' && $_POST['typeOfEmploy'] !== 'Retired') {
+        $dateOfHire = !empty($_POST['dateOfHire']) ? $_POST['dateOfHire'] : null;
+    }
+
     $stmt = $pdo->prepare("INSERT INTO employment_info 
         (tinNumber, employerName, employerAdd, typeOfEmploy, employStatus, rank, curPosition, sssNum, dateOfHire, curLengthService, officeNum, officeEmailAdd, hrContactPerson, officeTelNum, dayToCall, prevEmployer, prevLengthService, prevPosition, totalYrsWorking) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -76,7 +82,7 @@ try {
         $rank,
         $_POST['curPosition'],
         $_POST['sssNum'],
-        $_POST['dateOfHire'],
+        $dateOfHire, 
         $_POST['curLengthService'],
         $_POST['officeNum'],
         $_POST['officeEmailAdd'],
