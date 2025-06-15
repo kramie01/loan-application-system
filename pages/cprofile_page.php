@@ -63,7 +63,7 @@ try {
 <body>
     <header>
         <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
-        <h1>Cashalo - Loan Application System</h1>
+        <h1>LendEase - Loan Application System</h1>
     </header>
 
     <div class="main-container">
@@ -84,8 +84,8 @@ try {
                 <h1></h1>
                 <div class="profile-actions">
                     <?php if ($hasProfile): ?>
-                        <a href="../pages/edit_profile_page.php" class="btn btn-secondary">Edit Profile</a>
-                        <button class="btn btn-danger" onclick="openDeleteAccountModal()">Delete Account</button>
+                        <a href="../pages/edit_profile_page.php" class="btn btn-secondary">EDIT PROFILE</a>
+                        <button class="btn btn-danger" onclick="openDeleteAccountModal()">DELETE ACCOUNT</button>
                     <?php else: ?>
                         <a href="../pages/ccomplete_profile_page.php" class="btn btn-primary">Complete Profile</a>
                     <?php endif; ?>

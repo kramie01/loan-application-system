@@ -71,20 +71,18 @@ while ($row = $cardResult->fetch_assoc()) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Client - Edit Profile</title>
   <link rel="stylesheet" href="../assets/css/capply_style.css" />
- 
 </head>
 <body>
 
 <header>
     <img src="../assets/images/lendease_white.png" alt="Loan Logo" />
     <h1>LendEase - Client Loan Application System</h1>
-  </header>
+</header>
 
 <div class="main-container">
     <!-- Sidebar Navigation -->
@@ -393,15 +391,34 @@ while ($row = $cardResult->fetch_assoc()) {
             <?php endforeach; ?>
           </div>
 
-        <div style="display: flex; justify-content: space-between; gap: 12px;">
-          <button type="submit" class="form-submit-btn" onclick="window.location.href='cprofile_page.php'">Save Changes</button>
-          <button type="button" class="form-cancel-btn" onclick="window.location.href='cprofile_page.php'">Cancel</button>
+            <div style="display: flex; justify-content: space-between; gap: 12px;">
+              <button type="submit" class="form-submit-btn" onclick="window.location.href='cprofile_page.php'" >SAVE CHANGES</button>
+              <button type="button" class="form-cancel-btn" onclick="window.location.href='cprofile_page.php'">CANCEL</button>
+            </div>
         </div>
-              
-          </div>
       </form>
 
+<!-- Confirmation Modal -->
+<div id="updateConfirmationModal" class="modal-confirm">
+  <div class="modal-content-confirm">
+      <div class="modal-header">
+          <h4>Confirm Profile Update</h4>
+          <span class="close" onclick="closeUpdateModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+          <div class="confirmation-icon">👤</div>
+          <p><strong>Are you sure you want to update your profile?</strong></p>
+          <p class="warning-text">This action will save all changes you've made to your profile information.</p>
+      </div>
+      <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeUpdateModal()">CANCEL</button>
+          <button type="button" class="btn btn-primary" onclick="confirmUpdate()">YES, UPDATE MY PROFILE</button>
+      </div>
+  </div>
+</div>
+
 <script src="../assets/js/ccomplete_profile_script.js"></script>
+<script src="../assets/js/update_profile.js"></script>
 
 </body>
 </html>

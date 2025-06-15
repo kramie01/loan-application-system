@@ -120,7 +120,7 @@ $accountDeleted = isset($_GET['deleted']) && $_GET['deleted'] === 'true';
                 </div>
             </div>
             <div class="modal-actions">
-                <button type="button" class="btn btn-primary" onclick="closeAccountDeletedModal()">Continue to Homepage</button>
+                <button type="button" class="btn btn-primary" onclick="closeAccountDeletedModal()">CONTINUE TO HOMEPAGE</button>
             </div>
         </div>
     </div>

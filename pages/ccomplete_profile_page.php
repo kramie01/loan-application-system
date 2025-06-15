@@ -61,11 +61,11 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'client') {
             <label for="motherMaidenName">Mother's Maiden Name</label>
             <input id="motherMaidenName" name="motherMaidenName" required />
 
-            <label for="age">Age</label>
-            <input id="age" type="number" name="age" required readonly />
-
             <label for="birthDate">Birthdate</label>
             <input id="birthDate" type="date" name="birthDate" required />
+
+            <label for="age">Age</label>
+            <input id="age" type="number" name="age" required readonly />
 
             <script>
               const ageInput = document.getElementById('age');
